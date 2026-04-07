@@ -1,0 +1,27 @@
+{
+  "name": "car-project",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "homepage": "https://github.com/GeorgeThomas1863/car-project#readme",
+  "bugs": {
+    "url": "https://github.com/GeorgeThomas1863/car-project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeThomas1863/car-project.git"
+  },
+  "license": "ISC",
+  "author": "George H. Thomas",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "nodemon": "^3.1.14"
+  }
+}
