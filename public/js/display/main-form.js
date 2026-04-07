@@ -1,7 +1,7 @@
 import { buildCollapseContainer } from "./collapse.js";
 import { EXPAND_OPTIONS_SVG } from "../util/define-things.js";
 
-export const buildInputForm = async () => {
+export const buildMainForm = async () => {
   const inputFormWrapper = document.createElement("div");
   inputFormWrapper.id = "input-form-wrapper";
 
