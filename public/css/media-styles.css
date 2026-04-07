@@ -46,31 +46,16 @@
   .form-select-half,
   #select-ai-div,
   #select-model-div,
-  #model-options-toggle,
-  #extra-filters-toggle,
   #priority-div,
   #max-tokens-div,
   #temperature-div,
-  #extended-thinking-div,
-  #prebuilt-checkbox-div {
+  #extended-thinking-div {
     flex: 1 1 calc(50% - 0.375rem);
     min-width: 0;
   }
 
-  /* Reset the negative margin on prebuilt checkbox */
-  #prebuilt-checkbox-div {
-    margin-left: 0;
-  }
-
-  /* Toggle wrappers: expand to full width of their cell */
-  #model-options-toggle .toggle-wrapper,
-  #extra-filters-toggle .toggle-wrapper {
-    width: 100%;
-    min-width: 0;
-  }
-
-  /* Extra filters: 3 checkboxes per row */
-  #extra-filters-list-item .form-select-half {
+  /* Checkboxes row: 3 per row on tablet */
+  #car-options-list-item .form-row--checkboxes .form-select-half {
     flex: 1 1 calc(33.333% - 0.5rem);
   }
 
@@ -119,18 +104,15 @@
   .form-select-half,
   #select-ai-div,
   #select-model-div,
-  #model-options-toggle,
-  #extra-filters-toggle,
   #priority-div,
   #max-tokens-div,
   #temperature-div,
-  #extended-thinking-div,
-  #prebuilt-checkbox-div {
+  #extended-thinking-div {
     flex: 1 1 100%;
   }
 
-  /* Extra filters: keep 2 checkboxes per row on small phones */
-  #extra-filters-list-item .form-select-half {
+  /* Checkboxes row: 2 per row on small phones */
+  #car-options-list-item .form-row--checkboxes .form-select-half {
     flex: 1 1 calc(50% - 0.375rem);
   }
 

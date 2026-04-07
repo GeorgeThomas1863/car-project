@@ -13,24 +13,12 @@ export const EYE_OPEN_SVG = `
   </svg>
 `;
 
-export const COLLAPSE_ARROW_ICON = `   
+export const COLLAPSE_ARROW_ICON = `
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="6,9 12,15 18,9"></polyline>
       </svg>`;
 
-export const EXPAND_OPTIONS_SVG = `
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" data-label="modelOptionsToggle">
-        <line x1="12" y1="5" x2="12" y2="19" data-label="modelOptionsToggle"></line>
-        <line class="horizontal-line" x1="5" y1="12" x2="19" y2="12" data-label="modelOptionsToggle"></line>
-      </svg>
-    `;
-
-export const EXTRA_FILTERS_EXPAND_SVG = `
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" data-label="extraFiltersToggle">
-    <line x1="12" y1="5" x2="12" y2="19" data-label="extraFiltersToggle"></line>
-    <line class="horizontal-line" x1="5" y1="12" x2="19" y2="12" data-label="extraFiltersToggle"></line>
-  </svg>
-`;
+export const CHEVRON_DOWN_SVG = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 // export const FACEBOOK_ICON_SVG = `
 //       <svg viewBox="0 0 24 24" fill="currentColor">

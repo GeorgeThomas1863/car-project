@@ -100,33 +100,6 @@ export const runPwToggle = async () => {
   return true;
 };
 
-export const runModelOptionsToggle = async () => {
-  const modelOptionsListItem = document.getElementById("model-options-list-item");
-  // const modelOptionsContentWrapper = document.getElementById("model-options-content-wrapper");
-  const toggleButton = document.getElementById("model-options-toggle");
-
-  //expanded to collapsed
-  if (toggleButton.getAttribute("aria-expanded") === "true") {
-    await hideArray([modelOptionsListItem]);
-    toggleButton.setAttribute("aria-expanded", "false");
-    toggleButton.classList.remove("expanded");
-    modelOptionsListItem.style.borderBottom = "none";
-    modelOptionsListItem.style.borderTop = "none";
-    modelOptionsListItem.style.paddingBottom = "0";
-    modelOptionsListItem.style.paddingTop = "0";
-    return true;
-  }
-  //collapsed to expanded
-  await unhideArray([modelOptionsListItem]);
-  toggleButton.setAttribute("aria-expanded", "true");
-  toggleButton.classList.add("expanded");
-  modelOptionsListItem.style.borderBottom = "1px solid rgba(209, 213, 219, 0.6)";
-  modelOptionsListItem.style.borderTop = "1px solid rgba(209, 213, 219, 0.6)";
-  modelOptionsListItem.style.paddingBottom = "2rem";
-  modelOptionsListItem.style.paddingTop = "1.5rem";
-
-  return true;
-};
 
 export const runMakeChange = (make) => {
   const modelDiv = document.getElementById("model-div");
@@ -151,29 +124,34 @@ export const runMakeChange = (make) => {
   modelDiv.style.visibility = "visible";
 };
 
-export const runExtraFiltersToggle = async () => {
-  const extraFiltersListItem = document.getElementById("extra-filters-list-item");
-  const toggleButton = document.getElementById("extra-filters-toggle");
+export const runAiOptionsToggle = async () => {
+  const listItem = document.getElementById("ai-options-list-item");
+  const btn = document.getElementById("ai-options-toggle-btn");
+  const isExpanded = btn.getAttribute("aria-expanded") === "true";
 
-  //expanded to collapsed
-  if (toggleButton.getAttribute("aria-expanded") === "true") {
-    await hideArray([extraFiltersListItem]);
-    toggleButton.setAttribute("aria-expanded", "false");
-    toggleButton.classList.remove("expanded");
-    extraFiltersListItem.style.borderBottom = "none";
-    extraFiltersListItem.style.borderTop = "none";
-    extraFiltersListItem.style.paddingBottom = "0";
-    extraFiltersListItem.style.paddingTop = "0";
-    return true;
+  if (isExpanded) {
+    listItem.classList.add("hidden");
+    btn.setAttribute("aria-expanded", "false");
+    btn.classList.remove("expanded");
+  } else {
+    listItem.classList.remove("hidden");
+    btn.setAttribute("aria-expanded", "true");
+    btn.classList.add("expanded");
   }
-  //collapsed to expanded
-  await unhideArray([extraFiltersListItem]);
-  toggleButton.setAttribute("aria-expanded", "true");
-  toggleButton.classList.add("expanded");
-  extraFiltersListItem.style.borderBottom = "1px solid rgba(209, 213, 219, 0.6)";
-  extraFiltersListItem.style.borderTop = "1px solid rgba(209, 213, 219, 0.6)";
-  extraFiltersListItem.style.paddingBottom = "2rem";
-  extraFiltersListItem.style.paddingTop = "1.5rem";
+};
 
-  return true;
+export const runCarOptionsToggle = async () => {
+  const listItem = document.getElementById("car-options-list-item");
+  const btn = document.getElementById("car-options-toggle-btn");
+  const isExpanded = btn.getAttribute("aria-expanded") === "true";
+
+  if (isExpanded) {
+    listItem.classList.add("hidden");
+    btn.setAttribute("aria-expanded", "false");
+    btn.classList.remove("expanded");
+  } else {
+    listItem.classList.remove("hidden");
+    btn.setAttribute("aria-expanded", "true");
+    btn.classList.add("expanded");
+  }
 };

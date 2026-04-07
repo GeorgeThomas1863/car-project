@@ -1,5 +1,5 @@
 import { buildCollapseContainer } from "./collapse.js";
-import { EXPAND_OPTIONS_SVG, EXTRA_FILTERS_EXPAND_SVG } from "../util/define-things.js";
+import { CHEVRON_DOWN_SVG } from "../util/define-things.js";
 
 export const buildMainForm = async () => {
   const inputFormWrapper = document.createElement("div");
@@ -13,26 +13,17 @@ export const buildMainForm = async () => {
   inputFormElement.id = "input-form-element";
   inputFormElement.className = "form-element";
 
-  const selectRowListItem = await buildSelectRowListItem();
-  const modelOptionsListItem = await buildModelOptionsListItem();
-
-  const carFiltersListItem = await buildCarFiltersListItem();
-  const makeColorModelListItem = await buildMakeColorModelListItem();
-  const extraFiltersListItem = await buildExtraFiltersListItem();
-  const priceRangeListItem = await buildPriceRangeListItem();
-
   const pasteJobListItem = await buildPasteJobListItem();
   const submitListItem = await buildSubmitListItem();
+  const togglesRowListItem = await buildToggleRowListItem();
+  const aiOptionsListItem = await buildAiOptionsListItem();
+  const carOptionsListItem = await buildCarOptionsListItem();
 
-  // inputFormElement.append(inputTypeListItem, uploadListItem, selectRowListItem, modelOptionsListItem, pasteJobListItem, submitListItem);
   inputFormElement.append(
-    selectRowListItem,
-    modelOptionsListItem,
-    carFiltersListItem,
-    makeColorModelListItem,
-    extraFiltersListItem,
-    priceRangeListItem,
     pasteJobListItem,
+    togglesRowListItem,
+    aiOptionsListItem,
+    carOptionsListItem,
     submitListItem
   );
 
@@ -51,20 +42,6 @@ export const buildMainForm = async () => {
 };
 
 //----------
-
-export const buildSelectRowListItem = async () => {
-  const selectRowContainer = document.createElement("li");
-  selectRowContainer.id = "select-row-container";
-  selectRowContainer.className = "form-list-item form-row";
-
-  const selectAIDiv = await buildSelectAIDiv();
-  const selectModelDiv = await buildSelectModelDiv();
-  const modelOptionsToggle = await buildModelOptionsToggle();
-
-  selectRowContainer.append(selectAIDiv, selectModelDiv, modelOptionsToggle);
-
-  return selectRowContainer;
-};
 
 export const buildSelectAIDiv = async () => {
   const selectAIDiv = document.createElement("div");
@@ -138,79 +115,90 @@ export const buildSelectModelDiv = async () => {
   return selectModelDiv;
 };
 
-export const buildModelOptionsToggle = async () => {
-  const modelOptionsToggle = document.createElement("div");
-  modelOptionsToggle.id = "model-options-toggle";
-  modelOptionsToggle.className = "form-select-half";
-
-  const modelOptionsLabel = document.createElement("label");
-  modelOptionsLabel.setAttribute("for", "model-options-select");
-  modelOptionsLabel.textContent = "AI Options";
-  modelOptionsLabel.className = "form-label";
-
-  const toggleWrapper = document.createElement("div");
-  toggleWrapper.className = "toggle-wrapper";
-  toggleWrapper.setAttribute("data-label", "modelOptionsToggle");
-
-  const toggleButton = document.createElement("button");
-  toggleButton.id = "toggle-button";
-  toggleButton.className = "model-options-toggle-btn";
-  toggleButton.setAttribute("data-label", "modelOptionsToggle");
-  toggleButton.setAttribute("aria-expanded", "false");
-  toggleButton.setAttribute("aria-label", "Toggle model options");
-  toggleButton.innerHTML = EXPAND_OPTIONS_SVG;
-
-  toggleWrapper.append(toggleButton);
-
-  modelOptionsToggle.append(modelOptionsLabel, toggleWrapper);
-
-  return modelOptionsToggle;
-};
-
-export const buildExtraFiltersToggle = async () => {
-  const extraFiltersToggle = document.createElement("div");
-  extraFiltersToggle.id = "extra-filters-toggle";
-  extraFiltersToggle.className = "form-select-half";
-
-  const extraFiltersLabel = document.createElement("label");
-  extraFiltersLabel.setAttribute("for", "extra-filters-toggle-btn");
-  extraFiltersLabel.textContent = "Car Options";
-  extraFiltersLabel.className = "form-label";
-
-  const toggleWrapper = document.createElement("div");
-  toggleWrapper.className = "toggle-wrapper";
-  toggleWrapper.setAttribute("data-label", "extraFiltersToggle");
-
-  const toggleButton = document.createElement("button");
-  toggleButton.id = "extra-filters-toggle-btn";
-  toggleButton.className = "model-options-toggle-btn";
-  toggleButton.setAttribute("data-label", "extraFiltersToggle");
-  toggleButton.setAttribute("aria-expanded", "false");
-  toggleButton.setAttribute("aria-label", "Toggle extra filters");
-  toggleButton.innerHTML = EXTRA_FILTERS_EXPAND_SVG;
-
-  toggleWrapper.append(toggleButton);
-  extraFiltersToggle.append(extraFiltersLabel, toggleWrapper);
-
-  return extraFiltersToggle;
-};
-
 //----
 
-export const buildModelOptionsListItem = async () => {
-  const modelOptionsListItem = document.createElement("li");
-  modelOptionsListItem.id = "model-options-list-item";
-  modelOptionsListItem.className = "form-list-item form-row";
-  modelOptionsListItem.classList.add("hidden");
+export const buildToggleRowListItem = async () => {
+  const togglesRow = document.createElement("li");
+  togglesRow.id = "options-toggle-row";
+  togglesRow.className = "form-list-item form-row";
 
+  const aiBtn = document.createElement("button");
+  aiBtn.id = "ai-options-toggle-btn";
+  aiBtn.className = "options-section-toggle-btn";
+  aiBtn.setAttribute("data-label", "aiOptionsToggle");
+  aiBtn.setAttribute("aria-expanded", "false");
+  aiBtn.setAttribute("aria-label", "Toggle AI options");
+  aiBtn.innerHTML = `<span>AI Options</span>${CHEVRON_DOWN_SVG}`;
+
+  const carBtn = document.createElement("button");
+  carBtn.id = "car-options-toggle-btn";
+  carBtn.className = "options-section-toggle-btn";
+  carBtn.setAttribute("data-label", "carOptionsToggle");
+  carBtn.setAttribute("aria-expanded", "false");
+  carBtn.setAttribute("aria-label", "Toggle car options");
+  carBtn.innerHTML = `<span>Car Options</span>${CHEVRON_DOWN_SVG}`;
+
+  togglesRow.append(aiBtn, carBtn);
+  return togglesRow;
+};
+
+export const buildAiOptionsListItem = async () => {
+  const aiOptionsListItem = document.createElement("li");
+  aiOptionsListItem.id = "ai-options-list-item";
+  aiOptionsListItem.className = "form-list-item hidden";
+
+  const selectAIDiv = await buildSelectAIDiv();
+  const selectModelDiv = await buildSelectModelDiv();
   const priorityDiv = await buildPriorityDiv();
   const maxTokensDiv = await buildMaxTokensDiv();
   const temperatureDiv = await buildTemperatureDiv();
   const extendedThinkingDiv = await buildExtendedThinkingDiv();
 
-  modelOptionsListItem.append(priorityDiv, maxTokensDiv, temperatureDiv, extendedThinkingDiv);
+  const row1 = document.createElement("div");
+  row1.className = "form-row";
+  row1.append(selectAIDiv, selectModelDiv);
 
-  return modelOptionsListItem;
+  const row2 = document.createElement("div");
+  row2.className = "form-row";
+  row2.append(priorityDiv, maxTokensDiv, temperatureDiv, extendedThinkingDiv);
+
+  aiOptionsListItem.append(row1, row2);
+  return aiOptionsListItem;
+};
+
+export const buildCarOptionsListItem = async () => {
+  const carOptionsListItem = document.createElement("li");
+  carOptionsListItem.id = "car-options-list-item";
+  carOptionsListItem.className = "form-list-item hidden";
+
+  const conditionDiv = await buildConditionDiv();
+  const zipCodeDiv = await buildZipCodeDiv();
+  const searchRadiusDiv = await buildSearchRadiusDiv();
+  const colorDiv = await buildColorDiv();
+  const makeDiv = await buildMakeDiv();
+  const modelDiv = await buildModelDiv();
+  const engineTypeDiv = await buildEngineTypeDiv();
+  const leatherSeatsDiv = await buildLeatherSeatsDiv();
+  const sunroofDiv = await buildSunroofDiv();
+  const awdDiv = await buildAwdDiv();
+  const heatedSeatsDiv = await buildHeatedSeatsDiv();
+  const carPlayDiv = await buildCarPlayDiv();
+  const priceRangeDiv = await buildPriceRangeDiv();
+
+  const row1 = document.createElement("div");
+  row1.className = "form-row";
+  row1.append(conditionDiv, zipCodeDiv, searchRadiusDiv);
+
+  const row2 = document.createElement("div");
+  row2.className = "form-row";
+  row2.append(colorDiv, makeDiv, modelDiv);
+
+  const row3 = document.createElement("div");
+  row3.className = "form-row form-row--checkboxes";
+  row3.append(engineTypeDiv, leatherSeatsDiv, sunroofDiv, awdDiv, heatedSeatsDiv, carPlayDiv);
+
+  carOptionsListItem.append(row1, row2, row3, priceRangeDiv);
+  return carOptionsListItem;
 };
 
 //for service_tier
@@ -330,20 +318,6 @@ export const buildExtendedThinkingDiv = async () => {
 };
 
 //----------------
-
-export const buildCarFiltersListItem = async () => {
-  const carFiltersListItem = document.createElement("li");
-  carFiltersListItem.id = "car-filters-list-item";
-  carFiltersListItem.className = "form-list-item form-row";
-
-  const conditionDiv = await buildConditionDiv();
-  const zipCodeDiv = await buildZipCodeDiv();
-  const searchRadiusDiv = await buildSearchRadiusDiv();
-
-  carFiltersListItem.append(conditionDiv, zipCodeDiv, searchRadiusDiv);
-
-  return carFiltersListItem;
-};
 
 export const buildConditionDiv = async () => {
   const conditionDiv = document.createElement("div");
@@ -528,19 +502,6 @@ export const buildSearchRadiusDiv = async () => {
   return searchRadiusDiv;
 };
 
-export const buildMakeColorModelListItem = async () => {
-  const makeColorModelListItem = document.createElement("li");
-  makeColorModelListItem.id = "make-color-model-list-item";
-  makeColorModelListItem.className = "form-list-item form-row";
-
-  const colorDiv = await buildColorDiv();
-  const makeDiv = await buildMakeDiv();
-  const modelDiv = await buildModelDiv();
-  const extraFiltersToggle = await buildExtraFiltersToggle();
-
-  makeColorModelListItem.append(colorDiv, makeDiv, modelDiv, extraFiltersToggle);
-  return makeColorModelListItem;
-};
 
 export const buildModelDiv = async () => {
   const modelDiv = document.createElement("div");
@@ -567,23 +528,6 @@ export const buildModelDiv = async () => {
   return modelDiv;
 };
 
-export const buildExtraFiltersListItem = async () => {
-  const extraFiltersListItem = document.createElement("li");
-  extraFiltersListItem.id = "extra-filters-list-item";
-  extraFiltersListItem.className = "form-list-item form-row";
-  extraFiltersListItem.classList.add("hidden");
-
-  const engineTypeDiv = await buildEngineTypeDiv();
-  const leatherSeatsDiv = await buildLeatherSeatsDiv();
-  const sunroofDiv = await buildSunroofDiv();
-  const awdDiv = await buildAwdDiv();
-  const heatedSeatsDiv = await buildHeatedSeatsDiv();
-  const carPlayDiv = await buildCarPlayDiv();
-
-  extraFiltersListItem.append(engineTypeDiv, leatherSeatsDiv, sunroofDiv, awdDiv, heatedSeatsDiv, carPlayDiv);
-
-  return extraFiltersListItem;
-};
 
 export const buildEngineTypeDiv = async () => {
   const engineTypeDiv = document.createElement("div");
@@ -779,9 +723,9 @@ const updateSliderTrack = (trackEl, minVal, maxVal) => {
   trackEl.style.background = `linear-gradient(to right, #d1d5db ${l}%, #2563a8 ${l}%, #2563a8 ${r}%, #d1d5db ${r}%)`;
 };
 
-export const buildPriceRangeListItem = async () => {
-  const priceRangeListItem = document.createElement("li");
-  priceRangeListItem.id = "price-range-list-item";
+export const buildPriceRangeDiv = async () => {
+  const priceRangeListItem = document.createElement("div");
+  priceRangeListItem.id = "price-range-section";
   priceRangeListItem.className = "form-list-item";
 
   const priceLabel = document.createElement("label");
@@ -864,11 +808,11 @@ export const buildPasteJobListItem = async () => {
 
   const pasteJobInput = document.createElement("textarea");
   // pasteJobInput.rows = 15;
-  pasteJobInput.rows = 4;
+  pasteJobInput.rows = 10;
   pasteJobInput.name = "car-details";
   pasteJobInput.id = "car-details";
   pasteJobInput.className = "form-textarea";
-  pasteJobInput.placeholder = "[Describe your dream car here. Be as detailed as possible. The longer the better.]";
+  pasteJobInput.placeholder = "[Describe, in your own special words, your dream car here. Be as detailed as possible. Write an essay if you can.]\n\n(Or just use the settings buttons below.)";
 
   pasteJobListItem.append(pasteJobLabel, pasteJobInput);
 

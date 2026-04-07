@@ -28,7 +28,8 @@ a {
   color: black;
 }
 
-ul {
+ul,
+li {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -200,11 +201,11 @@ h4 {
 }
 
 .form-list-item:first-child {
-  padding-top: 1.25rem;
+  padding-top: 0;
 }
 
 .form-list-item:last-child {
-  padding-top: 0.5rem;
+  padding-top: 1rem;
   padding-bottom: 1.25rem;
 }
 
@@ -218,39 +219,6 @@ h4 {
   flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-#select-ai-div,
-#select-model-div {
-  flex: 0 0 40%;
-}
-
-#model-options-toggle {
-  flex: 0 0 20%;
-}
-
-#model-options-toggle .toggle-wrapper {
-  width: fit-content;
-  min-width: fit-content;
-}
-
-#extra-filters-toggle {
-  flex: 0 0 20%;
-}
-
-#extra-filters-toggle .toggle-wrapper {
-  width: fit-content;
-  min-width: fit-content;
-}
-
-#select-row-container {
-  padding-top: 0.5rem;
-}
-
-#model-options-list-item {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  gap: 1.5rem;
 }
 
 #priority-div {
@@ -308,11 +276,6 @@ h4 {
   margin-left: 0.25rem;
 }
 
-#extra-filters-list-item .form-label {
-  text-align: center;
-  margin-left: 0;
-}
-
 .form-select,
 .form-input,
 .form-textarea {
@@ -364,31 +327,6 @@ h4 {
   /* width: auto; */
 }
 
-.toggle-wrapper {
-  background: rgba(234, 235, 236, 0.9);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-}
-
-.model-options-toggle-btn {
-  width: 32px;
-  height: 24px;
-  display:   flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  color: #6b7280;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.model-options-toggle-btn.expanded {
-  transform: rotate(45deg);
-}
-
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 .btn-cancel {
@@ -397,6 +335,68 @@ h4 {
 
 .btn-cancel:hover {
   background: #4b5563;
+}
+
+/* ===== OPTIONS TOGGLE BUTTONS ===== */
+
+.options-section-toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(37, 99, 168, 0.07);
+  border: 1px solid rgba(37, 99, 168, 0.2);
+  border-radius: 8px;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.options-section-toggle-btn:hover {
+  background: rgba(37, 99, 168, 0.12);
+  border-color: rgba(37, 99, 168, 0.35);
+}
+
+.options-section-toggle-btn.expanded {
+  background: rgba(37, 99, 168, 0.12);
+  border-color: #2563a8;
+  color: #2563a8;
+}
+
+.options-section-toggle-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.options-section-toggle-btn.expanded svg {
+  transform: rotate(180deg);
+}
+
+/* ===== EXPANDED OPTION SECTIONS ===== */
+
+#ai-options-list-item,
+#car-options-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 1px solid rgba(209, 213, 219, 0.6);
+  border-bottom: 1px solid rgba(209, 213, 219, 0.6);
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+#price-range-section {
+  margin-top: 0.25rem;
+}
+
+#car-options-list-item .form-row--checkboxes .form-label {
+  text-align: center;
+  margin-left: 0;
 }
 
 /* ========== Price Range Slider ========== */
@@ -418,7 +418,7 @@ h4 {
   pointer-events: none;
 }
 
-#price-range-list-item input[type="range"] {
+#price-range-section input[type="range"] {
   position: absolute;
   top: 50%;
   left: 0;
@@ -433,7 +433,7 @@ h4 {
   padding: 0;
 }
 
-#price-range-list-item input[type="range"]::-webkit-slider-thumb {
+#price-range-section input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 18px;
@@ -446,7 +446,7 @@ h4 {
   pointer-events: all;
 }
 
-#price-range-list-item input[type="range"]::-moz-range-thumb {
+#price-range-section input[type="range"]::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -457,11 +457,11 @@ h4 {
   pointer-events: all;
 }
 
-#price-range-list-item input[type="range"]:focus {
+#price-range-section input[type="range"]:focus {
   outline: none;
 }
 
-#price-range-list-item input[type="range"]:focus::-webkit-slider-thumb {
+#price-range-section input[type="range"]:focus::-webkit-slider-thumb {
   box-shadow: 0 0 0 3px rgba(37, 99, 168, 0.2), 0 1px 4px rgba(37, 99, 168, 0.4);
 }
 
