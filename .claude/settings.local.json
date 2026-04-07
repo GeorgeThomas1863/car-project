@@ -7,7 +7,17 @@
       "mcp__plugin_context7_context7__query-docs",
       "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const p=JSON.parse\\(d\\); console.log\\(p.version\\)\")",
       "Bash(node -e \"import\\('@anthropic-ai/sdk'\\).then\\(m => { const a = new m.default\\(\\); console.log\\('OK'\\) }\\).catch\\(e => console.log\\(e.message\\)\\)\")",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:www.marketcheck.com)",
+      "WebFetch(domain:api.carsxe.com)",
+      "WebFetch(domain:docs.auto.dev)",
+      "WebFetch(domain:docs.marketcheck.com)",
+      "WebFetch(domain:www.carqueryapi.com)",
+      "WebFetch(domain:api.autodealerdata.com)",
+      "WebFetch(domain:carapis.com)",
+      "WebFetch(domain:datarade.ai)",
+      "WebFetch(domain:documenter.getpostman.com)",
+      "WebFetch(domain:developer.edmunds.com)"
     ]
   }
 }

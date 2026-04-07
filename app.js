@@ -5,6 +5,7 @@
 //put all css in main file
 
 import dotenv from "dotenv";
+import { connectDB } from "./src/db.js";
 
 dotenv.config({ path: ".env" });
 dotenv.config({ path: ".env.local" });
@@ -30,4 +31,9 @@ app.use(routes);
 //needed for file upload
 // app.use(uploadErrorHandler);
 
-app.listen(process.env.PORT);
+connectDB()
+  .then(() => app.listen(process.env.PORT))
+  .catch((err) => {
+    console.error("[app] MongoDB connection failed:", err.message);
+    app.listen(process.env.PORT);
+  });
