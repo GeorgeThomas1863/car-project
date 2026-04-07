@@ -99,3 +99,31 @@ export const runPwToggle = async () => {
   pwInput.type = "password";
   return true;
 };
+
+export const runModelOptionsToggle = async () => {
+  const modelOptionsListItem = document.getElementById("model-options-list-item");
+  // const modelOptionsContentWrapper = document.getElementById("model-options-content-wrapper");
+  const toggleButton = document.getElementById("model-options-toggle");
+
+  //expanded to collapsed
+  if (toggleButton.getAttribute("aria-expanded") === "true") {
+    await hideArray([modelOptionsListItem]);
+    toggleButton.setAttribute("aria-expanded", "false");
+    toggleButton.classList.remove("expanded");
+    modelOptionsListItem.style.borderBottom = "none";
+    modelOptionsListItem.style.borderTop = "none";
+    modelOptionsListItem.style.paddingBottom = "0";
+    modelOptionsListItem.style.paddingTop = "0";
+    return true;
+  }
+  //collapsed to expanded
+  await unhideArray([modelOptionsListItem]);
+  toggleButton.setAttribute("aria-expanded", "true");
+  toggleButton.classList.add("expanded");
+  modelOptionsListItem.style.borderBottom = "1px solid rgba(209, 213, 219, 0.6)";
+  modelOptionsListItem.style.borderTop = "1px solid rgba(209, 213, 219, 0.6)";
+  modelOptionsListItem.style.paddingBottom = "2rem";
+  modelOptionsListItem.style.paddingTop = "1.5rem";
+
+  return true;
+};

@@ -1,4 +1,5 @@
 import { runAuthSubmit } from "./run.js";
+import { runPwToggle, runModelOptionsToggle } from "./display/collapse.js";
 
 const authElement = document.getElementById("auth-element");
 const displayElement = document.getElementById("display-element");
@@ -16,6 +17,10 @@ export const clickHandler = async (e) => {
   console.log(clickType);
 
   if (clickType === "auth-submit") await runAuthSubmit();
+
+  //in collapse
+  if (clickType === "pwToggle") await runPwToggle();
+  if (clickType === "modelOptionsToggle") await runModelOptionsToggle();
   // if (clickType === "admin-auth-submit") await runAdminAuthSubmit();
   //   if (clickType === "submit-button") await runMainSubmit();
   //   if (clickType === "upload-button") await runUploadClick();
@@ -24,7 +29,7 @@ export const clickHandler = async (e) => {
   //   if (clickType === "admin-auth-modal-submit") await runAdminAuthModalSubmit();
   //   if (clickType === "admin-auth-modal-cancel") await runAdminAuthModalCancel();
 
-  //   if (clickType === "pwToggle") await runPwToggle();
+  //
   //   if (clickType === "modelOptionsToggle") await runModelOptionsToggle();
 };
 
@@ -50,6 +55,6 @@ if (authElement) {
 
 if (displayElement) {
   displayElement.addEventListener("click", clickHandler);
-//   displayElement.addEventListener("change", changeHandler);
+  //   displayElement.addEventListener("change", changeHandler);
   displayElement.addEventListener("keydown", keyHandler);
 }

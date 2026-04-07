@@ -6,24 +6,24 @@ export const buildMainForm = async () => {
   inputFormWrapper.id = "input-form-wrapper";
 
   const inputTitleElement = document.createElement("h2");
-  inputTitleElement.innerHTML = `Tool to Prettify Your Resume <span class="title-subtitle">("align it with a job description")</span>`;
+  inputTitleElement.innerHTML = `Tool to Force Claude to Find You a Car`;
   inputTitleElement.className = "form-title";
 
   const inputFormElement = document.createElement("div");
   inputFormElement.id = "input-form-element";
   inputFormElement.className = "form-element";
 
-  // const inputTypeListItem = await buildInputTypeListItem();
-  const uploadListItem = await buildUploadListItem();
-
   const selectRowListItem = await buildSelectRowListItem();
   const modelOptionsListItem = await buildModelOptionsListItem();
+
+  const carFiltersListItem = await buildCarFiltersListItem();
+  const priceRangeListItem = await buildPriceRangeListItem();
 
   const pasteJobListItem = await buildPasteJobListItem();
   const submitListItem = await buildSubmitListItem();
 
   // inputFormElement.append(inputTypeListItem, uploadListItem, selectRowListItem, modelOptionsListItem, pasteJobListItem, submitListItem);
-  inputFormElement.append(uploadListItem, selectRowListItem, modelOptionsListItem, pasteJobListItem, submitListItem);
+  inputFormElement.append(selectRowListItem, modelOptionsListItem, carFiltersListItem, priceRangeListItem, pasteJobListItem, submitListItem);
 
   // Build collapse container
   const collapseContainer = await buildCollapseContainer({
@@ -37,49 +37,6 @@ export const buildMainForm = async () => {
   inputFormWrapper.append(collapseContainer);
 
   return inputFormWrapper;
-};
-
-export const buildUploadListItem = async () => {
-  const uploadListItem = document.createElement("li");
-  uploadListItem.id = "upload-list-item";
-  uploadListItem.className = "form-list-item";
-
-  // Create hidden file input for file upload
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.id = "upload-file-input";
-  fileInput.accept = ".pdf,.doc,.docx";
-  fileInput.style.display = "none";
-
-  const uploadButton = document.createElement("button");
-  uploadButton.type = "button";
-  uploadButton.className = "btn-upload";
-  uploadButton.id = "upload-button";
-  uploadButton.textContent = "Upload your default resume";
-  uploadButton.setAttribute("data-label", "upload-button");
-
-  const uploadRowWrapper = document.createElement("div");
-  uploadRowWrapper.className = "upload-row-wrapper";
-
-  const uploadStatus = document.createElement("span");
-  uploadStatus.id = "upload-status";
-  uploadStatus.className = "upload-status";
-  uploadStatus.style.marginLeft = "10px";
-  uploadStatus.style.display = "none";
-
-  const deleteButton = document.createElement("button");
-  deleteButton.type = "button";
-  deleteButton.className = "btn-delete";
-  deleteButton.id = "delete-resume-button";
-  deleteButton.textContent = "Delete Resume";
-  deleteButton.setAttribute("data-label", "delete-resume-button");
-  deleteButton.style.display = "none";
-
-  uploadRowWrapper.append(uploadStatus, deleteButton);
-
-  uploadListItem.append(fileInput, uploadButton, uploadRowWrapper);
-
-  return uploadListItem;
 };
 
 //----------
@@ -114,9 +71,9 @@ export const buildSelectAIDiv = async () => {
   // aiSelectType.setAttribute("data-label", "ai-type-select");
 
   const optionArray = [
-    { value: "chatgpt", text: "ChatGPT", selected: true },
-    { value: "claude", text: "Claude" },
-    { value: "local", text: "Local LLM" },
+    { value: "claude", text: "Claude", selected: true },
+    { value: "chatgpt", text: "ChatGPT [DOES NOT WORK]" },
+    { value: "local", text: "Local LLM [DOES NOT WORK]" },
   ];
 
   for (let i = 0; i < optionArray.length; i++) {
@@ -150,12 +107,9 @@ export const buildSelectModelDiv = async () => {
   modelSelect.setAttribute("data-label", "model-select");
 
   const optionArray = [
-    { value: "gpt-5.4", text: "GPT 5.4", selected: true },
-    { value: "gpt-5.2", text: "GPT 5.2" },
-    { value: "gpt-5", text: "GPT 5" },
-    { value: "gpt-5-mini", text: "GPT 5 Mini" },
-    { value: "gpt-5-nano", text: "GPT 5 Nano" },
-    { value: "gpt-4.1-nano", text: "GPT 4.1 Nano (cheapest)" },
+    { value: "claude-opus-4-6", text: "Claude Opus 4.6", selected: true },
+    { value: "claude-sonnet-4-6", text: "Claude Sonnet 4.6" },
+    { value: "claude-haiku-4-5-20251001", text: "Claude Haiku 4.5" },
   ];
 
   for (let i = 0; i < optionArray.length; i++) {
@@ -180,7 +134,7 @@ export const buildModelOptionsToggle = async () => {
 
   const modelOptionsLabel = document.createElement("label");
   modelOptionsLabel.setAttribute("for", "model-options-select");
-  modelOptionsLabel.textContent = "Options";
+  modelOptionsLabel.textContent = "AI Options";
   modelOptionsLabel.className = "form-label";
 
   const toggleWrapper = document.createElement("div");
@@ -213,10 +167,8 @@ export const buildModelOptionsListItem = async () => {
   const priorityDiv = await buildPriorityDiv();
   const maxTokensDiv = await buildMaxTokensDiv();
   const temperatureDiv = await buildTemperatureDiv();
-  const prebuiltCheckbox = await buildPrebuiltCheckbox();
-  const piCheckbox = await buildPICheckbox();
 
-  modelOptionsListItem.append(priorityDiv, maxTokensDiv, temperatureDiv, prebuiltCheckbox, piCheckbox);
+  modelOptionsListItem.append(priorityDiv, maxTokensDiv, temperatureDiv);
 
   return modelOptionsListItem;
 };
@@ -308,54 +260,249 @@ export const buildTemperatureDiv = async () => {
   return temperatureDiv;
 };
 
-export const buildPrebuiltCheckbox = async () => {
-  const prebuiltCheckboxDiv = document.createElement("div");
-  prebuiltCheckboxDiv.id = "prebuilt-checkbox-div";
-  prebuiltCheckboxDiv.className = "form-select-half checkbox-wrapper";
+//----------------
 
-  const prebuiltLabel = document.createElement("label");
-  prebuiltLabel.setAttribute("for", "prebuilt-checkbox");
-  prebuiltLabel.textContent = "Nuke Ohio?";
-  prebuiltLabel.className = "form-label";
+export const buildCarFiltersListItem = async () => {
+  const carFiltersListItem = document.createElement("li");
+  carFiltersListItem.id = "car-filters-list-item";
+  carFiltersListItem.className = "form-list-item form-row";
 
-  const checkboxContainer = document.createElement("div");
-  checkboxContainer.className = "checkbox-container";
+  const conditionDiv = await buildConditionDiv();
+  const makeDiv = await buildMakeDiv();
+  const colorDiv = await buildColorDiv();
 
-  const prebuiltCheckbox = document.createElement("input");
-  prebuiltCheckbox.type = "checkbox";
-  prebuiltCheckbox.id = "prebuilt-checkbox";
-  prebuiltCheckbox.className = "form-checkbox";
-  prebuiltCheckbox.setAttribute("data-label", "prebuilt-checkbox");
+  carFiltersListItem.append(conditionDiv, makeDiv, colorDiv);
 
-  checkboxContainer.append(prebuiltCheckbox);
-  prebuiltCheckboxDiv.append(prebuiltLabel, checkboxContainer);
-
-  return prebuiltCheckboxDiv;
+  return carFiltersListItem;
 };
 
-export const buildPICheckbox = async () => {
-  const piCheckboxDiv = document.createElement("div");
-  piCheckboxDiv.id = "pi-checkbox-div";
-  piCheckboxDiv.className = "form-select-half checkbox-wrapper";
+export const buildConditionDiv = async () => {
+  const conditionDiv = document.createElement("div");
+  conditionDiv.id = "condition-div";
+  conditionDiv.className = "form-select-half";
 
-  const piLabel = document.createElement("label");
-  piLabel.setAttribute("for", "pi-checkbox");
-  piLabel.textContent = "PI?";
-  piLabel.className = "form-label";
+  const conditionLabel = document.createElement("label");
+  conditionLabel.setAttribute("for", "condition-select");
+  conditionLabel.textContent = "Condition";
+  conditionLabel.className = "form-label";
 
-  const piCheckboxContainer = document.createElement("div");
-  piCheckboxContainer.className = "checkbox-container";
+  const conditionSelect = document.createElement("select");
+  conditionSelect.id = "condition-select";
+  conditionSelect.className = "form-select";
 
-  const piCheckbox = document.createElement("input");
-  piCheckbox.type = "checkbox";
-  piCheckbox.id = "pi-checkbox";
-  piCheckbox.className = "form-checkbox";
-  piCheckbox.setAttribute("data-label", "pi-checkbox");
+  const optionArray = [
+    { value: "new", text: "New", selected: true },
+    { value: "used", text: "Used" },
+  ];
 
-  piCheckboxContainer.append(piCheckbox);
-  piCheckboxDiv.append(piLabel, piCheckboxContainer);
+  for (let i = 0; i < optionArray.length; i++) {
+    const optionData = optionArray[i];
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.text;
+    if (optionData.selected) option.selected = true;
+    conditionSelect.append(option);
+  }
 
-  return piCheckboxDiv;
+  conditionDiv.append(conditionLabel, conditionSelect);
+
+  return conditionDiv;
+};
+
+export const buildMakeDiv = async () => {
+  const makeDiv = document.createElement("div");
+  makeDiv.id = "make-div";
+  makeDiv.className = "form-select-half";
+
+  const makeLabel = document.createElement("label");
+  makeLabel.setAttribute("for", "make-select");
+  makeLabel.textContent = "Make";
+  makeLabel.className = "form-label";
+
+  const makeSelect = document.createElement("select");
+  makeSelect.id = "make-select";
+  makeSelect.className = "form-select";
+
+  const optionArray = [
+    { value: "any", text: "Any", selected: true },
+    { value: "toyota", text: "Toyota" },
+    { value: "honda", text: "Honda" },
+    { value: "ford", text: "Ford" },
+    { value: "chevrolet", text: "Chevrolet" },
+    { value: "bmw", text: "BMW" },
+    { value: "mercedes-benz", text: "Mercedes-Benz" },
+    { value: "hyundai", text: "Hyundai" },
+    { value: "nissan", text: "Nissan" },
+    { value: "subaru", text: "Subaru" },
+    { value: "tesla", text: "Tesla" },
+    { value: "volkswagen", text: "Volkswagen" },
+    { value: "audi", text: "Audi" },
+    { value: "lexus", text: "Lexus" },
+    { value: "mazda", text: "Mazda" },
+    { value: "kia", text: "Kia" },
+    { value: "jeep", text: "Jeep" },
+    { value: "ram", text: "Ram" },
+    { value: "gmc", text: "GMC" },
+    { value: "dodge", text: "Dodge" },
+    { value: "volvo", text: "Volvo" },
+    { value: "porsche", text: "Porsche" },
+    { value: "acura", text: "Acura" },
+    { value: "infiniti", text: "Infiniti" },
+    { value: "cadillac", text: "Cadillac" },
+    { value: "lincoln", text: "Lincoln" },
+    { value: "genesis", text: "Genesis" },
+    { value: "rivian", text: "Rivian" },
+    { value: "lucid", text: "Lucid" },
+  ];
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const optionData = optionArray[i];
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.text;
+    if (optionData.selected) option.selected = true;
+    makeSelect.append(option);
+  }
+
+  makeDiv.append(makeLabel, makeSelect);
+
+  return makeDiv;
+};
+
+export const buildColorDiv = async () => {
+  const colorDiv = document.createElement("div");
+  colorDiv.id = "color-div";
+  colorDiv.className = "form-select-half";
+
+  const colorLabel = document.createElement("label");
+  colorLabel.setAttribute("for", "color-select");
+  colorLabel.textContent = "Color";
+  colorLabel.className = "form-label";
+
+  const colorSelect = document.createElement("select");
+  colorSelect.id = "color-select";
+  colorSelect.className = "form-select";
+
+  const optionArray = [
+    { value: "any", text: "Any", selected: true },
+    { value: "white", text: "White" },
+    { value: "black", text: "Black" },
+    { value: "silver", text: "Silver" },
+    { value: "gray", text: "Gray" },
+    { value: "red", text: "Red" },
+    { value: "blue", text: "Blue" },
+    { value: "brown", text: "Brown" },
+    { value: "green", text: "Green" },
+    { value: "orange", text: "Orange" },
+    { value: "yellow", text: "Yellow" },
+    { value: "gold", text: "Gold" },
+    { value: "beige", text: "Beige" },
+    { value: "purple", text: "Purple" },
+  ];
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const optionData = optionArray[i];
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.text;
+    if (optionData.selected) option.selected = true;
+    colorSelect.append(option);
+  }
+
+  colorDiv.append(colorLabel, colorSelect);
+
+  return colorDiv;
+};
+
+//----------------
+
+const PRICE_MIN = 0;
+const PRICE_MAX = 100000;
+const PRICE_STEP = 5000;
+
+const formatPriceLabel = (value) => {
+  if (value <= PRICE_MIN) return "Any";
+  if (value >= PRICE_MAX) return "$100,000+";
+  return "$" + Number(value).toLocaleString("en-US");
+};
+
+const getPct = (value) => ((value - PRICE_MIN) / (PRICE_MAX - PRICE_MIN)) * 100;
+
+const updateSliderTrack = (trackEl, minVal, maxVal) => {
+  const l = getPct(minVal);
+  const r = getPct(maxVal);
+  trackEl.style.background = `linear-gradient(to right, #d1d5db ${l}%, #2563a8 ${l}%, #2563a8 ${r}%, #d1d5db ${r}%)`;
+};
+
+export const buildPriceRangeListItem = async () => {
+  const priceRangeListItem = document.createElement("li");
+  priceRangeListItem.id = "price-range-list-item";
+  priceRangeListItem.className = "form-list-item";
+
+  const priceLabel = document.createElement("label");
+  priceLabel.textContent = "Price Range";
+  priceLabel.className = "form-label";
+
+  const sliderWrapper = document.createElement("div");
+  sliderWrapper.id = "price-slider-wrapper";
+
+  const sliderTrack = document.createElement("div");
+  sliderTrack.id = "price-slider-track";
+
+  const minInput = document.createElement("input");
+  minInput.type = "range";
+  minInput.id = "price-min-input";
+  minInput.min = String(PRICE_MIN);
+  minInput.max = String(PRICE_MAX);
+  minInput.step = String(PRICE_STEP);
+  minInput.value = String(PRICE_MIN);
+  minInput.setAttribute("data-label", "price-min");
+
+  const maxInput = document.createElement("input");
+  maxInput.type = "range";
+  maxInput.id = "price-max-input";
+  maxInput.min = String(PRICE_MIN);
+  maxInput.max = String(PRICE_MAX);
+  maxInput.step = String(PRICE_STEP);
+  maxInput.value = String(PRICE_MAX);
+  maxInput.setAttribute("data-label", "price-max");
+
+  const priceDisplay = document.createElement("div");
+  priceDisplay.id = "price-range-display";
+  priceDisplay.textContent = "Any \u2013 $100,000+";
+
+  updateSliderTrack(sliderTrack, PRICE_MIN, PRICE_MAX);
+
+  minInput.addEventListener("input", () => {
+    let minVal = parseInt(minInput.value, 10);
+    const maxVal = parseInt(maxInput.value, 10);
+    if (minVal > maxVal) {
+      minVal = maxVal;
+      minInput.value = String(minVal);
+    }
+    minInput.style.zIndex = minVal === PRICE_MAX ? "5" : "3";
+    maxInput.style.zIndex = "4";
+    updateSliderTrack(sliderTrack, minVal, maxVal);
+    priceDisplay.textContent = formatPriceLabel(minVal) + " \u2013 " + formatPriceLabel(maxVal);
+  });
+
+  maxInput.addEventListener("input", () => {
+    const minVal = parseInt(minInput.value, 10);
+    let maxVal = parseInt(maxInput.value, 10);
+    if (maxVal < minVal) {
+      maxVal = minVal;
+      maxInput.value = String(maxVal);
+    }
+    maxInput.style.zIndex = maxVal === PRICE_MIN ? "5" : "4";
+    minInput.style.zIndex = maxVal === PRICE_MIN ? "4" : "3";
+    updateSliderTrack(sliderTrack, minVal, maxVal);
+    priceDisplay.textContent = formatPriceLabel(minVal) + " \u2013 " + formatPriceLabel(maxVal);
+  });
+
+  sliderWrapper.append(sliderTrack, minInput, maxInput);
+  priceRangeListItem.append(priceLabel, sliderWrapper, priceDisplay);
+
+  return priceRangeListItem;
 };
 
 //----------------

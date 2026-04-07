@@ -6,8 +6,6 @@ Important: You are the orchestrator. subagents execute. you should NOT build, ve
 
 Keep your replies extremely concise and focus on providing necessary information.
 
-When building or implementing a new feature use the code found in the .EXAMPLE-CODE/ directory to understand how the user prefers to build / design. Note the patterns shown in the .EXAMPLE-CODE/ folder and try to emulate them in your solution. The .EXAMPLE-CODE directory I'm talking about is in the root directory of this project.
-
 Put all pictures / screenshots you take with the mcp plugin in the "pics" subfolder, under the .claude folder in THIS project.
 
 # User preferences
