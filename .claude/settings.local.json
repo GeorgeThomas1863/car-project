@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find C:\\\\Users\\\\computer\\\\Desktop\\\\ALL2\\\\PROJECTS\\\\CODING_PROJECTS\\\\car-project:*)",
+      "WebSearch"
+    ]
+  }
+}

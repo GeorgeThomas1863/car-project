@@ -25,6 +25,13 @@ export const EXPAND_OPTIONS_SVG = `
       </svg>
     `;
 
+export const EXTRA_FILTERS_EXPAND_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" data-label="extraFiltersToggle">
+    <line x1="12" y1="5" x2="12" y2="19" data-label="extraFiltersToggle"></line>
+    <line class="horizontal-line" x1="5" y1="12" x2="19" y2="12" data-label="extraFiltersToggle"></line>
+  </svg>
+`;
+
 // export const FACEBOOK_ICON_SVG = `
 //       <svg viewBox="0 0 24 24" fill="currentColor">
 //         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -42,6 +49,138 @@ export const EXPAND_OPTIONS_SVG = `
 //         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
 //       </svg>
 //     `;
+
+export const carModelMap = {
+  toyota: [
+    { value: "any", text: "Any", selected: true },
+    { value: "camry", text: "Camry" },
+    { value: "corolla", text: "Corolla" },
+    { value: "corolla-cross", text: "Corolla Cross" },
+    { value: "rav4", text: "RAV4" },
+    { value: "rav4-prime", text: "RAV4 Prime" },
+    { value: "highlander", text: "Highlander" },
+    { value: "4runner", text: "4Runner" },
+    { value: "tacoma", text: "Tacoma" },
+    { value: "tundra", text: "Tundra" },
+    { value: "sequoia", text: "Sequoia" },
+    { value: "sienna", text: "Sienna" },
+    { value: "prius", text: "Prius" },
+    { value: "venza", text: "Venza" },
+    { value: "crown", text: "Crown" },
+    { value: "land-cruiser", text: "Land Cruiser" },
+    { value: "bz4x", text: "bZ4X" },
+    { value: "gr86", text: "GR86" },
+    { value: "supra", text: "Supra" },
+  ],
+  honda: [
+    { value: "any", text: "Any", selected: true },
+    { value: "civic", text: "Civic" },
+    { value: "civic-si", text: "Civic Si" },
+    { value: "civic-type-r", text: "Civic Type R" },
+    { value: "accord", text: "Accord" },
+    { value: "cr-v", text: "CR-V" },
+    { value: "hr-v", text: "HR-V" },
+    { value: "pilot", text: "Pilot" },
+    { value: "passport", text: "Passport" },
+    { value: "ridgeline", text: "Ridgeline" },
+    { value: "odyssey", text: "Odyssey" },
+    { value: "prologue", text: "Prologue" },
+  ],
+  subaru: [
+    { value: "any", text: "Any", selected: true },
+    { value: "outback", text: "Outback" },
+    { value: "forester", text: "Forester" },
+    { value: "crosstrek", text: "Crosstrek" },
+    { value: "impreza", text: "Impreza" },
+    { value: "legacy", text: "Legacy" },
+    { value: "ascent", text: "Ascent" },
+    { value: "wrx", text: "WRX" },
+    { value: "brz", text: "BRZ" },
+    { value: "solterra", text: "Solterra" },
+  ],
+  ford: [
+    { value: "any", text: "Any", selected: true },
+    { value: "f-150", text: "F-150" },
+    { value: "f-150-lightning", text: "F-150 Lightning" },
+    { value: "maverick", text: "Maverick" },
+    { value: "ranger", text: "Ranger" },
+    { value: "bronco", text: "Bronco" },
+    { value: "bronco-sport", text: "Bronco Sport" },
+    { value: "escape", text: "Escape" },
+    { value: "explorer", text: "Explorer" },
+    { value: "expedition", text: "Expedition" },
+    { value: "mustang", text: "Mustang" },
+    { value: "mustang-mach-e", text: "Mustang Mach-E" },
+  ],
+  chevrolet: [
+    { value: "any", text: "Any", selected: true },
+    { value: "silverado-1500", text: "Silverado 1500" },
+    { value: "silverado-ev", text: "Silverado EV" },
+    { value: "colorado", text: "Colorado" },
+    { value: "equinox", text: "Equinox" },
+    { value: "equinox-ev", text: "Equinox EV" },
+    { value: "trax", text: "Trax" },
+    { value: "trailblazer", text: "Trailblazer" },
+    { value: "blazer-ev", text: "Blazer EV" },
+    { value: "traverse", text: "Traverse" },
+    { value: "tahoe", text: "Tahoe" },
+    { value: "suburban", text: "Suburban" },
+    { value: "corvette", text: "Corvette" },
+  ],
+  hyundai: [
+    { value: "any", text: "Any", selected: true },
+    { value: "elantra", text: "Elantra" },
+    { value: "sonata", text: "Sonata" },
+    { value: "tucson", text: "Tucson" },
+    { value: "santa-fe", text: "Santa Fe" },
+    { value: "palisade", text: "Palisade" },
+    { value: "kona", text: "Kona" },
+    { value: "venue", text: "Venue" },
+    { value: "santa-cruz", text: "Santa Cruz" },
+    { value: "ioniq-5", text: "IONIQ 5" },
+    { value: "ioniq-6", text: "IONIQ 6" },
+    { value: "ioniq-9", text: "IONIQ 9" },
+  ],
+  dodge: [
+    { value: "any", text: "Any", selected: true },
+    { value: "charger", text: "Charger" },
+    { value: "charger-daytona", text: "Charger Daytona (EV)" },
+    { value: "durango", text: "Durango" },
+  ],
+  tesla: [
+    { value: "any", text: "Any", selected: true },
+    { value: "model-3", text: "Model 3" },
+    { value: "model-y", text: "Model Y" },
+    { value: "model-s", text: "Model S" },
+    { value: "model-x", text: "Model X" },
+    { value: "cybertruck", text: "Cybertruck" },
+  ],
+  volkswagen: [
+    { value: "any", text: "Any", selected: true },
+    { value: "jetta", text: "Jetta" },
+    { value: "golf-gti", text: "Golf GTI" },
+    { value: "golf-r", text: "Golf R" },
+    { value: "taos", text: "Taos" },
+    { value: "tiguan", text: "Tiguan" },
+    { value: "atlas", text: "Atlas" },
+    { value: "atlas-cross-sport", text: "Atlas Cross Sport" },
+    { value: "id4", text: "ID.4" },
+    { value: "id7", text: "ID.7" },
+    { value: "id-buzz", text: "ID. Buzz" },
+  ],
+  volvo: [
+    { value: "any", text: "Any", selected: true },
+    { value: "xc40", text: "XC40" },
+    { value: "xc60", text: "XC60" },
+    { value: "xc90", text: "XC90" },
+    { value: "v60-cross-country", text: "V60 Cross Country" },
+    { value: "ex30", text: "EX30" },
+    { value: "ex40", text: "EX40" },
+    { value: "ex90", text: "EX90" },
+  ],
+  chinese: [{ value: "any", text: "Any", selected: true }],
+  other: [{ value: "any", text: "Any", selected: true }],
+};
 
 export const modelMap = {
   chatgpt: [

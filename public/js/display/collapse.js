@@ -127,3 +127,30 @@ export const runModelOptionsToggle = async () => {
 
   return true;
 };
+
+export const runExtraFiltersToggle = async () => {
+  const extraFiltersListItem = document.getElementById("extra-filters-list-item");
+  const toggleButton = document.getElementById("extra-filters-toggle");
+
+  //expanded to collapsed
+  if (toggleButton.getAttribute("aria-expanded") === "true") {
+    await hideArray([extraFiltersListItem]);
+    toggleButton.setAttribute("aria-expanded", "false");
+    toggleButton.classList.remove("expanded");
+    extraFiltersListItem.style.borderBottom = "none";
+    extraFiltersListItem.style.borderTop = "none";
+    extraFiltersListItem.style.paddingBottom = "0";
+    extraFiltersListItem.style.paddingTop = "0";
+    return true;
+  }
+  //collapsed to expanded
+  await unhideArray([extraFiltersListItem]);
+  toggleButton.setAttribute("aria-expanded", "true");
+  toggleButton.classList.add("expanded");
+  extraFiltersListItem.style.borderBottom = "1px solid rgba(209, 213, 219, 0.6)";
+  extraFiltersListItem.style.borderTop = "1px solid rgba(209, 213, 219, 0.6)";
+  extraFiltersListItem.style.paddingBottom = "2rem";
+  extraFiltersListItem.style.paddingTop = "1.5rem";
+
+  return true;
+};

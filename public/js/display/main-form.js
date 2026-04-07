@@ -1,5 +1,5 @@
 import { buildCollapseContainer } from "./collapse.js";
-import { EXPAND_OPTIONS_SVG } from "../util/define-things.js";
+import { EXPAND_OPTIONS_SVG, EXTRA_FILTERS_EXPAND_SVG } from "../util/define-things.js";
 
 export const buildMainForm = async () => {
   const inputFormWrapper = document.createElement("div");
@@ -17,13 +17,24 @@ export const buildMainForm = async () => {
   const modelOptionsListItem = await buildModelOptionsListItem();
 
   const carFiltersListItem = await buildCarFiltersListItem();
+  const makeColorModelListItem = await buildMakeColorModelListItem();
+  const extraFiltersListItem = await buildExtraFiltersListItem();
   const priceRangeListItem = await buildPriceRangeListItem();
 
   const pasteJobListItem = await buildPasteJobListItem();
   const submitListItem = await buildSubmitListItem();
 
   // inputFormElement.append(inputTypeListItem, uploadListItem, selectRowListItem, modelOptionsListItem, pasteJobListItem, submitListItem);
-  inputFormElement.append(selectRowListItem, modelOptionsListItem, carFiltersListItem, priceRangeListItem, pasteJobListItem, submitListItem);
+  inputFormElement.append(
+    selectRowListItem,
+    modelOptionsListItem,
+    carFiltersListItem,
+    makeColorModelListItem,
+    extraFiltersListItem,
+    priceRangeListItem,
+    pasteJobListItem,
+    submitListItem
+  );
 
   // Build collapse container
   const collapseContainer = await buildCollapseContainer({
@@ -154,6 +165,34 @@ export const buildModelOptionsToggle = async () => {
   modelOptionsToggle.append(modelOptionsLabel, toggleWrapper);
 
   return modelOptionsToggle;
+};
+
+export const buildExtraFiltersToggle = async () => {
+  const extraFiltersToggle = document.createElement("div");
+  extraFiltersToggle.id = "extra-filters-toggle";
+  extraFiltersToggle.className = "form-select-half";
+
+  const extraFiltersLabel = document.createElement("label");
+  extraFiltersLabel.setAttribute("for", "extra-filters-toggle-btn");
+  extraFiltersLabel.textContent = "More Filters";
+  extraFiltersLabel.className = "form-label";
+
+  const toggleWrapper = document.createElement("div");
+  toggleWrapper.className = "toggle-wrapper";
+  toggleWrapper.setAttribute("data-label", "extraFiltersToggle");
+
+  const toggleButton = document.createElement("button");
+  toggleButton.id = "extra-filters-toggle-btn";
+  toggleButton.className = "model-options-toggle-btn";
+  toggleButton.setAttribute("data-label", "extraFiltersToggle");
+  toggleButton.setAttribute("aria-expanded", "false");
+  toggleButton.setAttribute("aria-label", "Toggle extra filters");
+  toggleButton.innerHTML = EXTRA_FILTERS_EXPAND_SVG;
+
+  toggleWrapper.append(toggleButton);
+  extraFiltersToggle.append(extraFiltersLabel, toggleWrapper);
+
+  return extraFiltersToggle;
 };
 
 //----
@@ -298,10 +337,10 @@ export const buildCarFiltersListItem = async () => {
   carFiltersListItem.className = "form-list-item form-row";
 
   const conditionDiv = await buildConditionDiv();
-  const makeDiv = await buildMakeDiv();
-  const colorDiv = await buildColorDiv();
+  const zipCodeDiv = await buildZipCodeDiv();
+  const searchRadiusDiv = await buildSearchRadiusDiv();
 
-  carFiltersListItem.append(conditionDiv, makeDiv, colorDiv);
+  carFiltersListItem.append(conditionDiv, zipCodeDiv, searchRadiusDiv);
 
   return carFiltersListItem;
 };
@@ -313,7 +352,7 @@ export const buildConditionDiv = async () => {
 
   const conditionLabel = document.createElement("label");
   conditionLabel.setAttribute("for", "condition-select");
-  conditionLabel.textContent = "Condition";
+  conditionLabel.textContent = "Car Condition";
   conditionLabel.className = "form-label";
 
   const conditionSelect = document.createElement("select");
@@ -321,8 +360,9 @@ export const buildConditionDiv = async () => {
   conditionSelect.className = "form-select";
 
   const optionArray = [
-    { value: "new", text: "New", selected: true },
-    { value: "used", text: "Used" },
+    { value: "any", text: "New or Used", selected: true },
+    { value: "new", text: "New Only" },
+    { value: "used", text: "Used Only" },
   ];
 
   for (let i = 0; i < optionArray.length; i++) {
@@ -357,32 +397,16 @@ export const buildMakeDiv = async () => {
     { value: "any", text: "Any", selected: true },
     { value: "toyota", text: "Toyota" },
     { value: "honda", text: "Honda" },
+    { value: "subaru", text: "Subaru" },
     { value: "ford", text: "Ford" },
     { value: "chevrolet", text: "Chevrolet" },
-    { value: "bmw", text: "BMW" },
-    { value: "mercedes-benz", text: "Mercedes-Benz" },
     { value: "hyundai", text: "Hyundai" },
-    { value: "nissan", text: "Nissan" },
-    { value: "subaru", text: "Subaru" },
+    { value: "dodge", text: "Dodge" },
     { value: "tesla", text: "Tesla" },
     { value: "volkswagen", text: "Volkswagen" },
-    { value: "audi", text: "Audi" },
-    { value: "lexus", text: "Lexus" },
-    { value: "mazda", text: "Mazda" },
-    { value: "kia", text: "Kia" },
-    { value: "jeep", text: "Jeep" },
-    { value: "ram", text: "Ram" },
-    { value: "gmc", text: "GMC" },
-    { value: "dodge", text: "Dodge" },
     { value: "volvo", text: "Volvo" },
-    { value: "porsche", text: "Porsche" },
-    { value: "acura", text: "Acura" },
-    { value: "infiniti", text: "Infiniti" },
-    { value: "cadillac", text: "Cadillac" },
-    { value: "lincoln", text: "Lincoln" },
-    { value: "genesis", text: "Genesis" },
-    { value: "rivian", text: "Rivian" },
-    { value: "lucid", text: "Lucid" },
+    { value: "chinese", text: "Chinese Garbage" },
+    { value: "other", text: "Other" },
   ];
 
   for (let i = 0; i < optionArray.length; i++) {
@@ -442,6 +466,297 @@ export const buildColorDiv = async () => {
   colorDiv.append(colorLabel, colorSelect);
 
   return colorDiv;
+};
+
+export const buildZipCodeDiv = async () => {
+  const zipCodeDiv = document.createElement("div");
+  zipCodeDiv.id = "zip-code-div";
+  zipCodeDiv.className = "form-select-half";
+
+  const zipCodeLabel = document.createElement("label");
+  zipCodeLabel.setAttribute("for", "zip-code-input");
+  zipCodeLabel.textContent = "Zip Code";
+  zipCodeLabel.className = "form-label";
+
+  const zipCodeInput = document.createElement("input");
+  zipCodeInput.type = "text";
+  zipCodeInput.id = "zip-code-input";
+  zipCodeInput.className = "form-input";
+  zipCodeInput.placeholder = "e.g. 90210";
+  zipCodeInput.maxLength = "10";
+
+  zipCodeDiv.append(zipCodeLabel, zipCodeInput);
+  return zipCodeDiv;
+};
+
+export const buildSearchRadiusDiv = async () => {
+  const searchRadiusDiv = document.createElement("div");
+  searchRadiusDiv.id = "search-radius-div";
+  searchRadiusDiv.className = "form-select-half";
+
+  const searchRadiusLabel = document.createElement("label");
+  searchRadiusLabel.setAttribute("for", "search-radius-select");
+  searchRadiusLabel.textContent = "Radius";
+  searchRadiusLabel.className = "form-label";
+
+  const searchRadiusSelect = document.createElement("select");
+  searchRadiusSelect.id = "search-radius-select";
+  searchRadiusSelect.className = "form-select";
+
+  const optionArray = [
+    { value: "10", text: "10 mi" },
+    { value: "25", text: "25 mi" },
+    { value: "50", text: "50 mi", selected: true },
+    { value: "100", text: "100 mi" },
+    { value: "150", text: "150 mi" },
+    { value: "200", text: "200 mi" },
+    { value: "300", text: "300 mi" },
+    { value: "500", text: "500 mi" },
+    { value: "any", text: "Any" },
+  ];
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const optionData = optionArray[i];
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.text;
+    if (optionData.selected) option.selected = true;
+    searchRadiusSelect.append(option);
+  }
+
+  searchRadiusDiv.append(searchRadiusLabel, searchRadiusSelect);
+  return searchRadiusDiv;
+};
+
+export const buildMakeColorModelListItem = async () => {
+  const makeColorModelListItem = document.createElement("li");
+  makeColorModelListItem.id = "make-color-model-list-item";
+  makeColorModelListItem.className = "form-list-item form-row";
+
+  const colorDiv = await buildColorDiv();
+  const makeDiv = await buildMakeDiv();
+  const modelDiv = await buildModelDiv();
+  const extraFiltersToggle = await buildExtraFiltersToggle();
+
+  makeColorModelListItem.append(colorDiv, makeDiv, modelDiv, extraFiltersToggle);
+  return makeColorModelListItem;
+};
+
+export const buildModelDiv = async () => {
+  const modelDiv = document.createElement("div");
+  modelDiv.id = "model-div";
+  modelDiv.className = "form-select-half";
+  modelDiv.style.visibility = "hidden";
+
+  const modelLabel = document.createElement("label");
+  modelLabel.setAttribute("for", "car-model-select");
+  modelLabel.textContent = "Model";
+  modelLabel.className = "form-label";
+
+  const modelSelect = document.createElement("select");
+  modelSelect.id = "car-model-select";
+  modelSelect.className = "form-select";
+
+  const option = document.createElement("option");
+  option.value = "";
+  option.textContent = "Any";
+  option.selected = true;
+  modelSelect.append(option);
+
+  modelDiv.append(modelLabel, modelSelect);
+  return modelDiv;
+};
+
+export const buildExtraFiltersListItem = async () => {
+  const extraFiltersListItem = document.createElement("li");
+  extraFiltersListItem.id = "extra-filters-list-item";
+  extraFiltersListItem.className = "form-list-item form-row";
+  extraFiltersListItem.classList.add("hidden");
+
+  const engineTypeDiv = await buildEngineTypeDiv();
+  const leatherSeatsDiv = await buildLeatherSeatsDiv();
+  const sunroofDiv = await buildSunroofDiv();
+  const awdDiv = await buildAwdDiv();
+  const heatedSeatsDiv = await buildHeatedSeatsDiv();
+  const carPlayDiv = await buildCarPlayDiv();
+
+  extraFiltersListItem.append(engineTypeDiv, leatherSeatsDiv, sunroofDiv, awdDiv, heatedSeatsDiv, carPlayDiv);
+
+  return extraFiltersListItem;
+};
+
+export const buildEngineTypeDiv = async () => {
+  const engineTypeDiv = document.createElement("div");
+  engineTypeDiv.id = "engine-type-div";
+  engineTypeDiv.className = "form-select-half";
+
+  const engineTypeLabel = document.createElement("label");
+  engineTypeLabel.setAttribute("for", "engine-type-select");
+  engineTypeLabel.textContent = "Engine Type";
+  engineTypeLabel.className = "form-label";
+
+  const engineTypeSelect = document.createElement("select");
+  engineTypeSelect.id = "engine-type-select";
+  engineTypeSelect.className = "form-select";
+
+  const optionArray = [
+    { value: "any", text: "Any", selected: true },
+    { value: "gas", text: "Gas" },
+    { value: "electric", text: "Electric" },
+    { value: "hybrid", text: "Hybrid" },
+  ];
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const optionData = optionArray[i];
+    const option = document.createElement("option");
+    option.value = optionData.value;
+    option.textContent = optionData.text;
+    if (optionData.selected) option.selected = true;
+    engineTypeSelect.append(option);
+  }
+
+  engineTypeDiv.append(engineTypeLabel, engineTypeSelect);
+  return engineTypeDiv;
+};
+
+export const buildLeatherSeatsDiv = async () => {
+  const leatherSeatsDiv = document.createElement("div");
+  leatherSeatsDiv.id = "leather-seats-div";
+  leatherSeatsDiv.className = "form-select-half";
+
+  const leatherSeatsLabel = document.createElement("label");
+  leatherSeatsLabel.setAttribute("for", "leather-seats-checkbox");
+  leatherSeatsLabel.textContent = "Leather Seats";
+  leatherSeatsLabel.className = "form-label";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const leatherSeatsCheckbox = document.createElement("input");
+  leatherSeatsCheckbox.type = "checkbox";
+  leatherSeatsCheckbox.id = "leather-seats-checkbox";
+  leatherSeatsCheckbox.className = "form-checkbox";
+
+  checkboxContainer.append(leatherSeatsCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  leatherSeatsDiv.append(leatherSeatsLabel, checkboxWrapper);
+
+  return leatherSeatsDiv;
+};
+
+export const buildSunroofDiv = async () => {
+  const sunroofDiv = document.createElement("div");
+  sunroofDiv.id = "sunroof-div";
+  sunroofDiv.className = "form-select-half";
+
+  const sunroofLabel = document.createElement("label");
+  sunroofLabel.setAttribute("for", "sunroof-checkbox");
+  sunroofLabel.textContent = "Sunroof";
+  sunroofLabel.className = "form-label";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const sunroofCheckbox = document.createElement("input");
+  sunroofCheckbox.type = "checkbox";
+  sunroofCheckbox.id = "sunroof-checkbox";
+  sunroofCheckbox.className = "form-checkbox";
+
+  checkboxContainer.append(sunroofCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  sunroofDiv.append(sunroofLabel, checkboxWrapper);
+
+  return sunroofDiv;
+};
+
+export const buildAwdDiv = async () => {
+  const awdDiv = document.createElement("div");
+  awdDiv.id = "awd-div";
+  awdDiv.className = "form-select-half";
+
+  const awdLabel = document.createElement("label");
+  awdLabel.setAttribute("for", "awd-checkbox");
+  awdLabel.textContent = "AWD / 4WD";
+  awdLabel.className = "form-label";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const awdCheckbox = document.createElement("input");
+  awdCheckbox.type = "checkbox";
+  awdCheckbox.id = "awd-checkbox";
+  awdCheckbox.className = "form-checkbox";
+
+  checkboxContainer.append(awdCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  awdDiv.append(awdLabel, checkboxWrapper);
+
+  return awdDiv;
+};
+
+export const buildHeatedSeatsDiv = async () => {
+  const heatedSeatsDiv = document.createElement("div");
+  heatedSeatsDiv.id = "heated-seats-div";
+  heatedSeatsDiv.className = "form-select-half";
+
+  const heatedSeatsLabel = document.createElement("label");
+  heatedSeatsLabel.setAttribute("for", "heated-seats-checkbox");
+  heatedSeatsLabel.textContent = "Heated Seats";
+  heatedSeatsLabel.className = "form-label";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const heatedSeatsCheckbox = document.createElement("input");
+  heatedSeatsCheckbox.type = "checkbox";
+  heatedSeatsCheckbox.id = "heated-seats-checkbox";
+  heatedSeatsCheckbox.className = "form-checkbox";
+
+  checkboxContainer.append(heatedSeatsCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  heatedSeatsDiv.append(heatedSeatsLabel, checkboxWrapper);
+
+  return heatedSeatsDiv;
+};
+
+export const buildCarPlayDiv = async () => {
+  const carPlayDiv = document.createElement("div");
+  carPlayDiv.id = "carplay-div";
+  carPlayDiv.className = "form-select-half";
+
+  const carPlayLabel = document.createElement("label");
+  carPlayLabel.setAttribute("for", "carplay-checkbox");
+  carPlayLabel.textContent = "CarPlay / AA";
+  carPlayLabel.className = "form-label";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const carPlayCheckbox = document.createElement("input");
+  carPlayCheckbox.type = "checkbox";
+  carPlayCheckbox.id = "carplay-checkbox";
+  carPlayCheckbox.className = "form-checkbox";
+
+  checkboxContainer.append(carPlayCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  carPlayDiv.append(carPlayLabel, checkboxWrapper);
+
+  return carPlayDiv;
 };
 
 //----------------
@@ -543,17 +858,17 @@ export const buildPasteJobListItem = async () => {
   pasteJobListItem.className = "form-list-item";
 
   const pasteJobLabel = document.createElement("label");
-  pasteJobLabel.setAttribute("for", "paste-job-input");
-  pasteJobLabel.textContent = "Custom Requirements";
+  pasteJobLabel.setAttribute("for", "car-details");
+  pasteJobLabel.textContent = "Details";
   pasteJobLabel.className = "form-label";
 
   const pasteJobInput = document.createElement("textarea");
   // pasteJobInput.rows = 15;
   pasteJobInput.rows = 7;
-  pasteJobInput.name = "paste-job-input";
-  pasteJobInput.id = "paste-job-input";
+  pasteJobInput.name = "car-details";
+  pasteJobInput.id = "car-details";
   pasteJobInput.className = "form-textarea";
-  pasteJobInput.placeholder = "[Describe your dream car here. Be as detailed as possible.]";
+  pasteJobInput.placeholder = "[Describe your dream car here. Be as detailed as possible. The longer the better.]";
 
   pasteJobListItem.append(pasteJobLabel, pasteJobInput);
 

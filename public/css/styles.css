@@ -234,6 +234,15 @@ h4 {
   min-width: fit-content;
 }
 
+#extra-filters-toggle {
+  flex: 0 0 20%;
+}
+
+#extra-filters-toggle .toggle-wrapper {
+  width: fit-content;
+  min-width: fit-content;
+}
+
 #select-row-container {
   padding-top: 0.5rem;
 }

@@ -3,6 +3,7 @@ import express from "express";
 import requireAuth from "../middleware/auth-config.js";
 import { displayMain, display401, display404, display500 } from "../controllers/display-controller.js";
 import { authController } from "../controllers/auth-controller.js";
+import { mainSubmitController } from "../controllers/data-controller.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get("/401", display401);
 // router.get("/check-file", requireAuth, checkRouteController);
 // router.delete("/delete-resume", requireAuth, deleteResumeController);
 
-// router.post("/submit", requireAuth, submitRouteController);
+router.post("/main-submit", requireAuth, mainSubmitController);
 
 router.get("/", requireAuth, displayMain);
 

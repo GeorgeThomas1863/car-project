@@ -1,5 +1,5 @@
 import { runAuthSubmit } from "./run.js";
-import { runPwToggle, runModelOptionsToggle } from "./display/collapse.js";
+import { runPwToggle, runModelOptionsToggle, runExtraFiltersToggle } from "./display/collapse.js";
 
 const authElement = document.getElementById("auth-element");
 const displayElement = document.getElementById("display-element");
@@ -21,6 +21,7 @@ export const clickHandler = async (e) => {
   //in collapse
   if (clickType === "pwToggle") await runPwToggle();
   if (clickType === "modelOptionsToggle") await runModelOptionsToggle();
+  if (clickType === "extraFiltersToggle") await runExtraFiltersToggle();
   // if (clickType === "admin-auth-submit") await runAdminAuthSubmit();
   //   if (clickType === "submit-button") await runMainSubmit();
   //   if (clickType === "upload-button") await runUploadClick();
