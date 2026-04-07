@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import crypto from "crypto";
 import dotenv from "dotenv";
-import { getCachedResult, setCachedResult, saveSearchHistory } from "./db.js";
+// import { getCachedResult, setCachedResult, saveSearchHistory } from "./db.js";
 
 dotenv.config({ path: ".env" });
 dotenv.config({ path: ".env.local" });
