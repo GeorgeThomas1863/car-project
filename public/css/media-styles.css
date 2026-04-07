@@ -1,10 +1,10 @@
 /* ==========================================================================
-   media-styles.css — Mobile-responsive breakpoints (desktop-first)
+   media-styles.css — Responsive breakpoints (desktop-first)
    ========================================================================== */
 
 
 /* --------------------------------------------------------------------------
-   1024px — Tablets / small laptops
+   1024px — Small laptops / large tablets
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
   #input-form-wrapper,
@@ -15,36 +15,35 @@
   #auth-form-wrapper {
     max-width: 90%;
   }
-
-  /* Slightly tighten horizontal padding on list items */
-  .form-list-item {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
 }
 
 
 /* --------------------------------------------------------------------------
-   768px — Large phones / portrait tablets
+   768px — Tablets / large phones
+   Switch form rows to 2-column wrap layout
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-  /* Full-width wrappers; preserve top/bottom margin */
   #input-form-wrapper,
   #auth-form-wrapper,
   #results-wrapper {
-    width: 100%;
     max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
   }
 
-  /* Stack flex rows vertically */
+  .form-list-item {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  /* Wrap into 2-column grid */
   .form-row {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 0.75rem;
   }
 
-  /* All fixed-flex items become full-width */
+  /* All flex items: 2-column layout */
+  .form-select-half,
   #select-ai-div,
   #select-model-div,
   #model-options-toggle,
@@ -54,10 +53,28 @@
   #temperature-div,
   #extended-thinking-div,
   #prebuilt-checkbox-div {
-    flex: 1 1 100%;
+    flex: 1 1 calc(50% - 0.375rem);
+    min-width: 0;
   }
 
-  /* Results sections — reduce horizontal padding */
+  /* Reset the negative margin on prebuilt checkbox */
+  #prebuilt-checkbox-div {
+    margin-left: 0;
+  }
+
+  /* Toggle wrappers: expand to full width of their cell */
+  #model-options-toggle .toggle-wrapper,
+  #extra-filters-toggle .toggle-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Extra filters: 3 checkboxes per row */
+  #extra-filters-list-item .form-select-half {
+    flex: 1 1 calc(33.333% - 0.5rem);
+  }
+
+  /* Results section padding */
   .results-summary-section {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -83,14 +100,41 @@
 
 /* --------------------------------------------------------------------------
    480px — Small phones
+   Switch to fully stacked single-column layout
    -------------------------------------------------------------------------- */
 @media (max-width: 480px) {
-  /* Tightest padding for list items */
-  .form-list-item {
-    padding: 0.75rem 0.75rem;
+  #input-form-wrapper,
+  #auth-form-wrapper,
+  #results-wrapper {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 
-  /* Results sections — minimum horizontal padding */
+  .form-list-item {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* All form items go full-width */
+  .form-select-half,
+  #select-ai-div,
+  #select-model-div,
+  #model-options-toggle,
+  #extra-filters-toggle,
+  #priority-div,
+  #max-tokens-div,
+  #temperature-div,
+  #extended-thinking-div,
+  #prebuilt-checkbox-div {
+    flex: 1 1 100%;
+  }
+
+  /* Extra filters: keep 2 checkboxes per row on small phones */
+  #extra-filters-list-item .form-select-half {
+    flex: 1 1 calc(50% - 0.375rem);
+  }
+
+  /* Results sections */
   .results-summary-section {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -112,12 +156,10 @@
     margin-right: 0.75rem;
   }
 
-  /* Slightly smaller badge text on tiny screens */
   .listing-badge {
     font-size: 0.7rem;
   }
 
-  /* Slightly smaller listing link text */
   .listing-card__link {
     font-size: 0.78rem;
   }
