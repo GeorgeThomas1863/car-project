@@ -28,7 +28,13 @@ const showResultsError = (message) => {
 };
 
 export const runMainSubmit = async () => {
-  const params = await buildMainParams();
+  let params;
+  try {
+    params = await buildMainParams();
+  } catch {
+    showResultsError("Unable to read form values. Please reload the page.");
+    return null;
+  }
   if (!params) return null;
 
   await showLoadStatus();

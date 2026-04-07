@@ -3,9 +3,9 @@ import Anthropic from "@anthropic-ai/sdk";
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const SERVICE_TIER_MAP = {
-  priority: "priority",
-  default: "standard",
-  flex: "flex",
+  priority: "auto",
+  default: "standard_only",
+  flex: "standard_only",
 };
 
 const SYSTEM_PROMPT = `You are a professional car shopping assistant. Your job is to search the web for real, currently-listed vehicles that match the user's criteria. Use the web_search tool to search major platforms including AutoTrader, Cars.com, CarGurus, CarMax, and local dealer sites.
@@ -15,7 +15,6 @@ CRITICAL OUTPUT RULE: You MUST respond with ONLY valid JSON. Do not include any 
 Return JSON matching this exact schema:
 {
   "summary": "Brief description of what you searched for and how many results you found",
-  "search_date": "YYYY-MM-DD",
   "listings": [
     {
       "url": "https://direct-listing-url",
@@ -126,12 +125,12 @@ const extractJSON = (text) => {
 export const carSearchAI = async (params) => {
   if (!params) return null;
 
-  const apiTier = SERVICE_TIER_MAP[params.serviceTier] ?? "standard";
-  const maxTokens = Math.max(1000, parseInt(params.maxTokens, 10) || 50000);
+  const apiTier = SERVICE_TIER_MAP[params.serviceTier] ?? "auto";
   const extendedThinking = params.extendedThinking === true || params.extendedThinking === "true";
+  const maxTokens = Math.max(extendedThinking ? 2048 : 1000, parseInt(params.maxTokens, 10) || 50000);
 
   const thinkingConfig = extendedThinking
-    ? { type: "enabled", budget_tokens: Math.max(1024, Math.floor(maxTokens * 0.8)) }
+    ? { type: "enabled", budget_tokens: Math.min(Math.max(1024, Math.floor(maxTokens * 0.8)), maxTokens - 1) }
     : undefined;
 
   const apiParams = {

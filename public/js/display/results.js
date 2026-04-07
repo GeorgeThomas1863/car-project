@@ -10,7 +10,7 @@ const formatPrice = (price) => {
 };
 
 const formatMileage = (mileage) => {
-  if (!mileage) return null;
+  if (mileage == null) return null;
   return Number(mileage).toLocaleString("en-US") + " mi";
 };
 
@@ -69,7 +69,7 @@ const buildListingCard = (listing, isAlternative) => {
   }
 
   // View listing link
-  if (listing.url) {
+  if (listing.url && /^https?:\/\//i.test(listing.url)) {
     const link = document.createElement("a");
     link.className = "listing-card__link";
     link.href = listing.url;
@@ -171,6 +171,8 @@ export const buildResultsDisplay = async (data) => {
     className: "results-collapse",
     dataAttribute: "resultsCollapse",
   });
+
+  if (!collapseContainer) return null;
 
   const wrapper = document.createElement("div");
   wrapper.id = "results-wrapper";
