@@ -170,6 +170,7 @@ h4 {
 /* +++++++++++++++++++++++++ */
 
 #input-form-wrapper {
+  font-family: "Roboto Condensed", sans-serif;
   /* margin: 3rem auto; */
   margin: 1.5rem auto;
   max-width: 700px;
@@ -219,15 +220,22 @@ h4 {
   flex-direction: column;
 }
 
-/* override for toggle */
+#select-ai-div,
+#select-model-div {
+  flex: 0 0 40%;
+}
+
 #model-options-toggle {
-  flex: 0 0 auto; 
-  min-width: fit-content;
+  flex: 0 0 20%;
 }
 
 #model-options-toggle .toggle-wrapper {
   width: fit-content;
   min-width: fit-content;
+}
+
+#select-row-container {
+  padding-top: 0.5rem;
 }
 
 #model-options-list-item {
@@ -241,11 +249,16 @@ h4 {
 }
 
 #max-tokens-div {
-  flex: 0 0 15%;
+  flex: 0 0 20%;
 }
 
 #temperature-div {
   flex: 0 0 10%;
+}
+
+#extended-thinking-div {
+  flex: 0 0 20%;
+  align-items: center;
 }
 
 #prebuilt-checkbox-div {
@@ -345,9 +358,9 @@ h4 {
 }
 
 .model-options-toggle-btn {
-  width: 24px;
+  width: 32px;
   height: 24px;
-  display: flex;
+  display:   flex;
   align-items: center;
   justify-content: center;
   background: transparent;

@@ -167,8 +167,9 @@ export const buildModelOptionsListItem = async () => {
   const priorityDiv = await buildPriorityDiv();
   const maxTokensDiv = await buildMaxTokensDiv();
   const temperatureDiv = await buildTemperatureDiv();
+  const extendedThinkingDiv = await buildExtendedThinkingDiv();
 
-  modelOptionsListItem.append(priorityDiv, maxTokensDiv, temperatureDiv);
+  modelOptionsListItem.append(priorityDiv, maxTokensDiv, temperatureDiv, extendedThinkingDiv);
 
   return modelOptionsListItem;
 };
@@ -258,6 +259,35 @@ export const buildTemperatureDiv = async () => {
 
   temperatureDiv.append(temperatureLabel, temperatureInput);
   return temperatureDiv;
+};
+
+export const buildExtendedThinkingDiv = async () => {
+  const extThinkingDiv = document.createElement("div");
+  extThinkingDiv.id = "extended-thinking-div";
+  extThinkingDiv.className = "form-select-half";
+
+  const extThinkingLabel = document.createElement("label");
+  extThinkingLabel.setAttribute("for", "extended-thinking-checkbox");
+  extThinkingLabel.className = "form-label";
+  extThinkingLabel.textContent = "Extended Thinking";
+
+  const checkboxWrapper = document.createElement("div");
+  checkboxWrapper.className = "checkbox-wrapper";
+
+  const checkboxContainer = document.createElement("div");
+  checkboxContainer.className = "checkbox-container";
+
+  const extThinkingCheckbox = document.createElement("input");
+  extThinkingCheckbox.type = "checkbox";
+  extThinkingCheckbox.id = "extended-thinking-checkbox";
+  extThinkingCheckbox.className = "form-checkbox";
+  extThinkingCheckbox.checked = true;
+
+  checkboxContainer.append(extThinkingCheckbox);
+  checkboxWrapper.append(checkboxContainer);
+  extThinkingDiv.append(extThinkingLabel, checkboxWrapper);
+
+  return extThinkingDiv;
 };
 
 //----------------
@@ -514,7 +544,7 @@ export const buildPasteJobListItem = async () => {
 
   const pasteJobLabel = document.createElement("label");
   pasteJobLabel.setAttribute("for", "paste-job-input");
-  pasteJobLabel.textContent = "Job Description";
+  pasteJobLabel.textContent = "Custom Requirements";
   pasteJobLabel.className = "form-label";
 
   const pasteJobInput = document.createElement("textarea");
@@ -523,7 +553,7 @@ export const buildPasteJobListItem = async () => {
   pasteJobInput.name = "paste-job-input";
   pasteJobInput.id = "paste-job-input";
   pasteJobInput.className = "form-textarea";
-  pasteJobInput.placeholder = "[Paste the ENTIRE job description here]";
+  pasteJobInput.placeholder = "[Describe your dream car here. Be as detailed as possible.]";
 
   pasteJobListItem.append(pasteJobLabel, pasteJobInput);
 
