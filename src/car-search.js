@@ -1,4 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
+dotenv.config({ path: ".env.local" });
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -11,6 +15,12 @@ const SERVICE_TIER_MAP = {
 const SYSTEM_PROMPT = `You are a professional car shopping assistant. Your job is to search the web for real, currently-listed vehicles that match the user's criteria. Use the web_search tool to search major platforms including AutoTrader, Cars.com, CarGurus, CarMax, and local dealer sites.
 
 CRITICAL OUTPUT RULE: You MUST respond with ONLY valid JSON. Do not include any text before or after the JSON. Do not use markdown code fences. Do not explain your findings in prose. Your entire response must be parseable by JSON.parse().
+
+AVAILABILITY VERIFICATION: You MUST verify each listing is actively for sale before including it. Follow this process:
+1. When searching, always include terms that bias toward active listings — e.g., append "for sale 2026" or use site-specific searches on CarGurus/AutoTrader (e.g., site:cargurus.com OR site:autotrader.com) which maintain real-time inventory.
+2. Scan every search snippet carefully for sold/unavailable signals: words or phrases like "sold", "no longer available", "listing has ended", "this vehicle has been sold", "listing expired", "vehicle is gone". Discard any listing whose snippets contain these signals.
+3. For each candidate listing that passes the initial snippet scan, perform a follow-up web_search using the specific VIN (if known) or the year + make + model + dealer name combination to confirm the snippet does NOT show a sold/expired status.
+4. Only include a listing in the output if the follow-up search confirms it is actively for sale.
 
 Return JSON matching this exact schema:
 {
@@ -28,6 +38,7 @@ Return JSON matching this exact schema:
       "source": "AutoTrader",
       "seller": "ABC Toyota",
       "location": "Beverly Hills, CA",
+      "availability_note": "Listed as available on AutoTrader; follow-up search confirmed no sold/expired signals",
       "missing_criteria": []
     }
   ],
@@ -44,6 +55,7 @@ Return JSON matching this exact schema:
       "source": "Cars.com",
       "seller": "XYZ Motors",
       "location": "Santa Monica, CA",
+      "availability_note": "Dealer inventory page shows in stock; no sold signals found in snippets",
       "missing_criteria": ["color: white (found: silver)", "mileage above requested range"]
     }
   ],
@@ -56,7 +68,12 @@ Rules:
 - Return only INDIVIDUAL listing URLs (direct car pages), NOT search result pages.
 - If fewer than 3 exact matches found, include closest alternatives.
 - price: integer (no currency symbols). mileage: integer. year: integer.
-- If a field is unknown/unavailable, use null.`;
+- If a field is unknown/unavailable, use null.
+- availability_note: required string for every listing and alternative. Briefly describe what availability signal was found (e.g., "Listed today on AutoTrader as available", "Dealer inventory page shows in stock", "Follow-up VIN search confirmed active listing").
+- NEVER include a listing if any search snippet shows it is sold, expired, no longer available, or removed.
+- Before including a listing, do a follow-up web_search to verify availability. Only include it if the follow-up confirms it is actively for sale.
+- Prefer dealer inventory pages and real-time listing platforms over cached aggregator results.
+- Include today's date context in search queries where helpful (e.g. "for sale 2026") to bias toward fresh listings.`;
 
 const buildUserMessage = (params) => {
   const priceMin = parseInt(params.priceMin, 10);
@@ -127,7 +144,10 @@ export const carSearchAI = async (params) => {
 
   const apiTier = SERVICE_TIER_MAP[params.serviceTier] ?? "auto";
   const extendedThinking = params.extendedThinking === true || params.extendedThinking === "true";
-  const maxTokens = Math.max(extendedThinking ? 2048 : 1000, parseInt(params.maxTokens, 10) || 50000);
+  const maxTokens = Math.min(
+    Math.max(extendedThinking ? 2048 : 1000, parseInt(params.maxTokens, 10) || 16000),
+    16000
+  );
 
   const thinkingConfig = extendedThinking
     ? { type: "enabled", budget_tokens: Math.min(Math.max(1024, Math.floor(maxTokens * 0.8)), maxTokens - 1) }

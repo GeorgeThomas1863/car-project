@@ -1,4 +1,4 @@
-import { EYE_CLOSED_SVG, EYE_OPEN_SVG } from "../util/define-things.js";
+import { EYE_CLOSED_SVG, EYE_OPEN_SVG, carModelMap } from "../util/define-things.js";
 
 export const buildCollapseContainer = async (inputObj) => {
   if (!inputObj || !inputObj.titleElement || !inputObj.contentElement) return null;
@@ -126,6 +126,29 @@ export const runModelOptionsToggle = async () => {
   modelOptionsListItem.style.paddingTop = "1.5rem";
 
   return true;
+};
+
+export const runMakeChange = (make) => {
+  const modelDiv = document.getElementById("model-div");
+  const modelSelect = document.getElementById("car-model-select");
+
+  modelSelect.innerHTML = "";
+
+  const models = carModelMap[make];
+  if (make === "any" || !models) {
+    modelDiv.style.visibility = "hidden";
+    return;
+  }
+
+  for (const modelData of models) {
+    const option = document.createElement("option");
+    option.value = modelData.value;
+    option.textContent = modelData.text;
+    if (modelData.selected) option.selected = true;
+    modelSelect.append(option);
+  }
+
+  modelDiv.style.visibility = "visible";
 };
 
 export const runExtraFiltersToggle = async () => {

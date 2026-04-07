@@ -1,5 +1,5 @@
 import { runAuthSubmit, runMainSubmit } from "./run.js";
-import { runPwToggle, runModelOptionsToggle, runExtraFiltersToggle } from "./display/collapse.js";
+import { runPwToggle, runModelOptionsToggle, runExtraFiltersToggle, runMakeChange } from "./display/collapse.js";
 
 const authElement = document.getElementById("auth-element");
 const displayElement = document.getElementById("display-element");
@@ -46,8 +46,12 @@ if (authElement) {
   authElement.addEventListener("keydown", keyHandler);
 }
 
+export const changeHandler = (e) => {
+  if (e.target.id === "make-select") runMakeChange(e.target.value);
+};
+
 if (displayElement) {
   displayElement.addEventListener("click", clickHandler);
-  //   displayElement.addEventListener("change", changeHandler);
+  displayElement.addEventListener("change", changeHandler);
   displayElement.addEventListener("keydown", keyHandler);
 }

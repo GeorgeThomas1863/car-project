@@ -174,7 +174,7 @@ export const buildExtraFiltersToggle = async () => {
 
   const extraFiltersLabel = document.createElement("label");
   extraFiltersLabel.setAttribute("for", "extra-filters-toggle-btn");
-  extraFiltersLabel.textContent = "More Filters";
+  extraFiltersLabel.textContent = "Car Options";
   extraFiltersLabel.className = "form-label";
 
   const toggleWrapper = document.createElement("div");
@@ -265,10 +265,10 @@ export const buildMaxTokensDiv = async () => {
   maxTokensInput.id = "max-tokens-input";
   maxTokensInput.className = "form-input";
   maxTokensInput.min = "1000";
-  maxTokensInput.max = "1000000";
+  maxTokensInput.max = "16000";
   maxTokensInput.step = "1000";
-  maxTokensInput.value = "50000";
-  maxTokensInput.placeholder = "50000";
+  maxTokensInput.value = "16000";
+  maxTokensInput.placeholder = "16000";
 
   maxTokensDiv.append(maxTokensLabel, maxTokensInput);
 
@@ -482,7 +482,7 @@ export const buildZipCodeDiv = async () => {
   zipCodeInput.type = "text";
   zipCodeInput.id = "zip-code-input";
   zipCodeInput.className = "form-input";
-  zipCodeInput.placeholder = "e.g. 90210";
+  zipCodeInput.placeholder = "e.g. 22030";
   zipCodeInput.maxLength = "10";
 
   zipCodeDiv.append(zipCodeLabel, zipCodeInput);
@@ -601,7 +601,7 @@ export const buildEngineTypeDiv = async () => {
 
   const optionArray = [
     { value: "any", text: "Any", selected: true },
-    { value: "gas", text: "Gas" },
+    { value: "gas", text: "Internal Combustion" },
     { value: "electric", text: "Electric" },
     { value: "hybrid", text: "Hybrid" },
   ];
@@ -864,7 +864,7 @@ export const buildPasteJobListItem = async () => {
 
   const pasteJobInput = document.createElement("textarea");
   // pasteJobInput.rows = 15;
-  pasteJobInput.rows = 7;
+  pasteJobInput.rows = 4;
   pasteJobInput.name = "car-details";
   pasteJobInput.id = "car-details";
   pasteJobInput.className = "form-textarea";
