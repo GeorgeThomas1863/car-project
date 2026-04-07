@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(find C:\\\\Users\\\\computer\\\\Desktop\\\\ALL2\\\\PROJECTS\\\\CODING_PROJECTS\\\\car-project:*)",
-      "WebSearch"
+      "WebSearch",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "mcp__plugin_context7_context7__query-docs",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const p=JSON.parse\\(d\\); console.log\\(p.version\\)\")",
+      "Bash(node -e \"import\\('@anthropic-ai/sdk'\\).then\\(m => { const a = new m.default\\(\\); console.log\\('OK'\\) }\\).catch\\(e => console.log\\(e.message\\)\\)\")"
     ]
   }
 }

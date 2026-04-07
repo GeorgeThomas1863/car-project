@@ -1,0 +1,249 @@
+/* ===== LOADING OVERLAY ===== */
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  gap: 1rem;
+}
+
+.loading-overlay.active {
+  display: flex;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: #ffffff;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* ===== RESULTS DISPLAY ===== */
+
+#results-wrapper {
+  font-family: "Roboto Condensed", sans-serif;
+  margin: 1.5rem auto;
+  max-width: 700px;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+
+.results-content {
+  padding: 0 0 1.25rem 0;
+}
+
+/* Summary */
+.results-summary-section {
+  padding: 0.875rem 2rem 1rem 2rem;
+  border-bottom: 1px solid rgba(209, 213, 219, 0.6);
+}
+
+.results-summary {
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Section headers */
+.results-section-header {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.results-section-header.alternatives-header {
+  color: #d97706;
+}
+
+/* Sections */
+.results-listings-section,
+.results-alternatives-section {
+  padding: 1rem 2rem;
+}
+
+.results-alternatives-section {
+  border-top: 1px solid rgba(209, 213, 219, 0.6);
+}
+
+/* Card grid */
+.listings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Card base */
+.listing-card {
+  background: #fafbfc;
+  border-radius: 8px;
+  border: 1px solid rgba(209, 213, 219, 0.6);
+  border-left: 4px solid #2563a8;
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.listing-card:hover {
+  box-shadow: 0 2px 12px rgba(37, 99, 168, 0.15);
+}
+
+.listing-card--alt {
+  border-left-color: #d97706;
+}
+
+.listing-card--alt:hover {
+  box-shadow: 0 2px 12px rgba(217, 119, 6, 0.15);
+}
+
+/* Card header: title + price */
+.listing-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.listing-card__year-make-model {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.listing-card__price {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2563a8;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.listing-card--alt .listing-card__price {
+  color: #d97706;
+}
+
+/* Meta row */
+.listing-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+}
+
+.listing-card__meta-item {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.listing-card__meta-item + .listing-card__meta-item::before {
+  content: "· ";
+  color: #d1d5db;
+}
+
+/* Missing criteria badges */
+.listing-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.listing-badge {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  border-radius: 4px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* View listing link as button */
+.listing-card__link {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  background: #2563a8;
+  color: #ffffff;
+  border-radius: 6px;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+  transition: background 0.2s ease;
+}
+
+.listing-card__link:hover {
+  background: #1d5398;
+  color: #ffffff;
+}
+
+.listing-card--alt .listing-card__link {
+  background: #d97706;
+}
+
+.listing-card--alt .listing-card__link:hover {
+  background: #b45309;
+}
+
+/* Notes */
+.results-notes-section {
+  margin: 0 2rem;
+  padding: 0.75rem 1rem;
+  background: #f3f4f6;
+  border-radius: 8px;
+  border-left: 3px solid #9ca3af;
+}
+
+.results-notes {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Error state */
+.results-error-message {
+  font-family: "Roboto Condensed", sans-serif;
+  margin: 1.5rem auto;
+  max-width: 700px;
+  padding: 1.25rem 2rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #ef4444;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 1rem;
+  line-height: 1.5;
+}

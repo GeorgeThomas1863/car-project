@@ -6,4 +6,6 @@ export const mainSubmitController = async (req, res) => {
 
     const data = await carSearchAI(params);
     if (!data) return res.status(500).json({ success: false, message: "Failed to search for car" });
-}
+
+    return res.json({ success: true, data });
+};

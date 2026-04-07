@@ -12,10 +12,16 @@ export const buildMainParams = async () => {
     condition: document.getElementById("condition-select").value,
     make: document.getElementById("make-select").value,
     color: document.getElementById("color-select").value,
-    model: document.getElementById("model-select").value,
+    model: document.getElementById("car-model-select").value,
     priceMin: document.getElementById("price-min-input").value,
     priceMax: document.getElementById("price-max-input").value,
     details: document.getElementById("car-details").value,
+    engineType: document.getElementById("engine-type-select").value,
+    leatherSeats: document.getElementById("leather-seats-checkbox").checked,
+    sunroof: document.getElementById("sunroof-checkbox").checked,
+    awd: document.getElementById("awd-checkbox").checked,
+    heatedSeats: document.getElementById("heated-seats-checkbox").checked,
+    carPlay: document.getElementById("carplay-checkbox").checked,
   };
   return params;
 };
