@@ -1,0 +1,124 @@
+/* ==========================================================================
+   media-styles.css — Mobile-responsive breakpoints (desktop-first)
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1024px — Tablets / small laptops
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  #input-form-wrapper,
+  #results-wrapper {
+    max-width: 90%;
+  }
+
+  #auth-form-wrapper {
+    max-width: 90%;
+  }
+
+  /* Slightly tighten horizontal padding on list items */
+  .form-list-item {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   768px — Large phones / portrait tablets
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Full-width wrappers; preserve top/bottom margin */
+  #input-form-wrapper,
+  #auth-form-wrapper,
+  #results-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Stack flex rows vertically */
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* All fixed-flex items become full-width */
+  #select-ai-div,
+  #select-model-div,
+  #model-options-toggle,
+  #extra-filters-toggle,
+  #priority-div,
+  #max-tokens-div,
+  #temperature-div,
+  #extended-thinking-div,
+  #prebuilt-checkbox-div {
+    flex: 1 1 100%;
+  }
+
+  /* Results sections — reduce horizontal padding */
+  .results-summary-section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .results-listings-section,
+  .results-alternatives-section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .results-error-message {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .results-notes-section {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   480px — Small phones
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  /* Tightest padding for list items */
+  .form-list-item {
+    padding: 0.75rem 0.75rem;
+  }
+
+  /* Results sections — minimum horizontal padding */
+  .results-summary-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .results-listings-section,
+  .results-alternatives-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .results-error-message {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .results-notes-section {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+  }
+
+  /* Slightly smaller badge text on tiny screens */
+  .listing-badge {
+    font-size: 0.7rem;
+  }
+
+  /* Slightly smaller listing link text */
+  .listing-card__link {
+    font-size: 0.78rem;
+  }
+}
