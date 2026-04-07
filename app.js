@@ -2,6 +2,8 @@
 
 //car is pretty
 
+//put all css in main file
+
 import dotenv from "dotenv";
 
 dotenv.config({ path: ".env" });
