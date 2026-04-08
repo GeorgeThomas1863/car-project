@@ -124,16 +124,39 @@ details: ${params.details || ""}`;
 
 async function buildMarketcheckParams(params) {
   const apiTier = SERVICE_TIER_MAP[params.serviceTier] ?? "auto";
+  const messages = [{ role: "user", content: buildQueryBuilderMessage(params) }];
+
   const response = await client.messages.create({
     model: params.modelType || "claude-sonnet-4-6",
     max_tokens: 512,
-    temperature: 0.3,
+    temperature: 0,
     system: QUERY_BUILDER_SYSTEM,
-    messages: [{ role: "user", content: buildQueryBuilderMessage(params) }],
+    messages,
     service_tier: apiTier,
   });
   const text = response.content.filter(b => b.type === "text").map(b => b.text).join("");
-  return extractJSON(text);
+  const parsed = extractJSON(text);
+  if (parsed !== null) return parsed;
+
+  // Claude returned prose — retry with an explicit correction message
+  console.warn("[car-search] First response was not JSON — retrying with correction prompt.");
+  messages.push({ role: "assistant", content: text });
+  messages.push({ role: "user", content: "Your previous response was not valid JSON. Output ONLY the JSON object with no explanation, no markdown, no code fences — just the raw JSON." });
+
+  const retry = await client.messages.create({
+    model: params.modelType || "claude-sonnet-4-6",
+    max_tokens: 512,
+    temperature: 0,
+    system: QUERY_BUILDER_SYSTEM,
+    messages,
+    service_tier: apiTier,
+  });
+  const retryText = retry.content.filter(b => b.type === "text").map(b => b.text).join("");
+  const retryParsed = extractJSON(retryText);
+  if (retryParsed !== null) return retryParsed;
+
+  console.error("[car-search] Both JSON parse attempts failed. Last raw response:", retryText.slice(0, 300));
+  throw Object.assign(new Error("query_build_failed"), { queryBuildFailed: true });
 }
 
 async function fetchMarketcheckListings(marketcheckParams) {
@@ -291,6 +314,15 @@ export const carSearchAI = async (params) => {
   try {
     marketcheckParams = await buildMarketcheckParams(params);
   } catch (err) {
+    if (err.queryBuildFailed) {
+      return {
+        summary: "Something went wrong building your search query — the AI assistant returned an unexpected response. Please try again or simplify your search.",
+        listings: [],
+        alternatives: [],
+        notes: "If this keeps happening, try removing some filters or rephrasing your details.",
+        error: "query_build_failed",
+      };
+    }
     console.error("[car-search] buildMarketcheckParams error:", err.message);
     return null;
   }
@@ -300,8 +332,11 @@ export const carSearchAI = async (params) => {
     return null;
   }
 
-  // Step 2: Ensure rows is set
+  // Step 2: Ensure rows is set and radius is within subscription cap
   marketcheckParams.rows = marketcheckParams.rows || 25;
+  if (typeof marketcheckParams.radius === "number") {
+    marketcheckParams.radius = Math.min(marketcheckParams.radius, 100);
+  }
 
   // Step 3: Build query hash
   const queryHash = buildQueryHash(marketcheckParams);
