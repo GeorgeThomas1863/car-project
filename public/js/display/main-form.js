@@ -19,13 +19,7 @@ export const buildMainForm = async () => {
   const aiOptionsListItem = await buildAiOptionsListItem();
   const carOptionsListItem = await buildCarOptionsListItem();
 
-  inputFormElement.append(
-    pasteJobListItem,
-    togglesRowListItem,
-    aiOptionsListItem,
-    carOptionsListItem,
-    submitListItem
-  );
+  inputFormElement.append(pasteJobListItem, togglesRowListItem, aiOptionsListItem, carOptionsListItem, submitListItem);
 
   // Build collapse container
   const collapseContainer = await buildCollapseContainer({
@@ -95,8 +89,8 @@ export const buildSelectModelDiv = async () => {
   modelSelect.setAttribute("data-label", "model-select");
 
   const optionArray = [
-    { value: "claude-opus-4-6", text: "Claude Opus 4.6", selected: true },
-    { value: "claude-sonnet-4-6", text: "Claude Sonnet 4.6" },
+    { value: "claude-sonnet-4-6", text: "Claude Sonnet 4.6", selected: true },
+    { value: "claude-opus-4-6", text: "Claude Opus 4.6" },
     { value: "claude-haiku-4-5-20251001", text: "Claude Haiku 4.5" },
   ];
 
@@ -308,7 +302,7 @@ export const buildExtendedThinkingDiv = async () => {
   extThinkingCheckbox.type = "checkbox";
   extThinkingCheckbox.id = "extended-thinking-checkbox";
   extThinkingCheckbox.className = "form-checkbox";
-  extThinkingCheckbox.checked = true;
+  extThinkingCheckbox.checked = false;
 
   checkboxContainer.append(extThinkingCheckbox);
   checkboxWrapper.append(checkboxContainer);
@@ -502,7 +496,6 @@ export const buildSearchRadiusDiv = async () => {
   return searchRadiusDiv;
 };
 
-
 export const buildModelDiv = async () => {
   const modelDiv = document.createElement("div");
   modelDiv.id = "model-div";
@@ -527,7 +520,6 @@ export const buildModelDiv = async () => {
   modelDiv.append(modelLabel, modelSelect);
   return modelDiv;
 };
-
 
 export const buildEngineTypeDiv = async () => {
   const engineTypeDiv = document.createElement("div");
@@ -812,7 +804,8 @@ export const buildPasteJobListItem = async () => {
   pasteJobInput.name = "car-details";
   pasteJobInput.id = "car-details";
   pasteJobInput.className = "form-textarea";
-  pasteJobInput.placeholder = "[Describe, in your own special words, your dream car here. Be as detailed as possible. Write an essay if you can.]\n\n(Or just use the settings buttons below.)";
+  pasteJobInput.placeholder =
+    "[Describe, in your own special words, your dream car here. Be as detailed as possible. Write an essay if you can.]\n\n(Or just use the settings buttons below.)";
 
   pasteJobListItem.append(pasteJobLabel, pasteJobInput);
 
