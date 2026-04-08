@@ -23,7 +23,7 @@ const QUERY_BUILDER_SYSTEM = `You are a Marketcheck API query parameter translat
 OUTPUT RULE: Respond with ONLY valid JSON. No markdown, no code fences, no text before or after the JSON object. Never invent values not present in the input.
 
 Parameter mapping:
-- zip: user's zip code as a string. If searchRadius is "any", OMIT zip entirely.
+- zip: user's zip code as a string. If searchRadius is "any", OMIT zip entirely. If searchRadius is set and zip is not specified, assume the zip code is 22030.  
 - radius: search radius as an integer. If searchRadius is "any", OMIT entirely (omitting both zip and radius means nationwide). If searchRadius is a number, include it.
 - car_type: "new" if condition=new, "used" if condition=used. Omit if condition is "any".
 - make: lowercase make string. Omit if "any", unspecified, or if make is "chinese".
@@ -282,6 +282,9 @@ async function saveSearchHistory({ queryHash, formParams, marketcheckParams, num
 
 export const carSearchAI = async (params) => {
   if (!params) return null;
+  
+  console.log("INPUT PARAMS");
+  console.log(params);  
 
   // Step 1: Build Marketcheck params via Claude
   let marketcheckParams;
