@@ -282,9 +282,9 @@ async function saveSearchHistory({ queryHash, formParams, marketcheckParams, num
 
 export const carSearchAI = async (params) => {
   if (!params) return null;
-  
-  console.log("INPUT PARAMS");
-  console.log(params);  
+
+  // console.log("INPUT PARAMS");
+  // console.log(params);  
 
   // Step 1: Build Marketcheck params via Claude
   let marketcheckParams;
