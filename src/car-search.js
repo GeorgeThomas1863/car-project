@@ -1,12 +1,16 @@
 import Anthropic from "@anthropic-ai/sdk";
 import crypto from "crypto";
 import dotenv from "dotenv";
-// import { getCachedResult, setCachedResult, saveSearchHistory } from "./db.js";
+import DbModel from "../models/db-model.js";
 
 dotenv.config({ path: ".env" });
 dotenv.config({ path: ".env.local" });
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const CAR_CACHE_COLLECTION = "car-search-cache";
+const CAR_HISTORY_COLLECTION = "car-search-history";
 
 const SERVICE_TIER_MAP = {
   priority: "auto",
@@ -40,11 +44,22 @@ Parameter mapping:
     Omit hvf entirely if none are checked.
 - rows: always set to 25
 
-Details field instructions: Read the details field for additional concrete criteria and extract:
+Details field instructions: Read the details field for additional concrete criteria and extract ALL of the following:
 - Year range (e.g. "2020 or newer") → add year_min and/or year_max as integers
 - Mileage limit (e.g. "under 50k miles") → add mileage_range as "0:50000"
 - Specific make/model mentions → add or override make/model fields accordingly
-- Ignore subjective preferences ("sporty", "nice looking", "comfortable")
+- Color mentions (e.g. "black car", "I want white", "prefer silver") → set or override exterior_color
+- Fuel type mentions (e.g. "electric only", "hybrid", "gas") → set or override fuel_type
+- Condition mentions (e.g. "only new", "used is fine") → set or override car_type
+- Feature mentions → add to hvf (deduplicate — never list the same feature twice):
+    - sunroof / panoramic roof / moonroof → "Panoramic Roof"
+    - leather seats / leather interior → "Leather Seats"
+    - awd / all wheel drive / 4wd / four wheel drive → "All Wheel Drive"
+    - heated seats / heated front seats → "Heated Front Seat(s)"
+    - carplay / apple carplay → "Apple CarPlay"
+- Price constraints from text (e.g. "under $30k", "budget $25,000") → inform price_range
+- If the details text clearly states a value that conflicts with a form field selection, the text wins.
+- Ignore subjective preferences ("sporty", "nice looking", "comfortable").
 
 Example output:
 {
@@ -191,6 +206,18 @@ function transformMarketcheckResponse(data) {
   });
 }
 
+function extractFormParams(params) {
+  const { aiType, modelType, serviceTier, maxTokens, temperature, extendedThinking, route, ...rest } = params;
+  return rest;
+}
+
+function buildZeroResultsSummary(marketcheckParams) {
+  const make = marketcheckParams.make || "";
+  const model = marketcheckParams.model || "";
+  const label = [make, model].filter(Boolean).join(" ") || "vehicle";
+  return `No ${label} listings found matching your criteria.`;
+}
+
 async function generateSummary(params, marketcheckParams, numFound, listingCount) {
   const make = marketcheckParams.make || "any make";
   const model = marketcheckParams.model || "any model";
@@ -217,22 +244,46 @@ async function generateSummary(params, marketcheckParams, numFound, listingCount
   }
 }
 
-function extractFormParams(params) {
-  const { aiType, modelType, serviceTier, maxTokens, temperature, extendedThinking, route, ...rest } = params;
-  return rest;
+async function getCachedResult(queryHash) {
+  try {
+    const model = new DbModel({ keyToLookup: "queryHash", itemValue: queryHash }, CAR_CACHE_COLLECTION);
+    const cached = await model.getUniqueItem();
+    if (!cached) return null;
+    if (Date.now() - new Date(cached.cachedAt).getTime() > CACHE_TTL_MS) return null;
+    return cached.data;
+  } catch {
+    return null;
+  }
 }
 
-function buildZeroResultsSummary(marketcheckParams) {
-  const make = marketcheckParams.make || "";
-  const model = marketcheckParams.model || "";
-  const label = [make, model].filter(Boolean).join(" ") || "vehicle";
-  return `No ${label} listings found matching your criteria.`;
+async function setCachedResult(queryHash, data, marketcheckParams) {
+  try {
+    const model = new DbModel(
+      { queryHash, marketcheckParams, data, cachedAt: new Date().toISOString() },
+      CAR_CACHE_COLLECTION
+    );
+    await model.storeAny();
+  } catch (err) {
+    console.error("[car-search] setCachedResult error:", err.message);
+  }
+}
+
+async function saveSearchHistory({ queryHash, formParams, marketcheckParams, numFound, numListingsReturned, cacheHit }) {
+  try {
+    const model = new DbModel(
+      { queryHash, formParams, marketcheckParams, numFound, numListingsReturned, cacheHit, searchedAt: new Date().toISOString() },
+      CAR_HISTORY_COLLECTION
+    );
+    await model.storeAny();
+  } catch (err) {
+    console.error("[car-search] saveSearchHistory error:", err.message);
+  }
 }
 
 export const carSearchAI = async (params) => {
   if (!params) return null;
 
-  // Step 2: Build Marketcheck params via Claude
+  // Step 1: Build Marketcheck params via Claude
   let marketcheckParams;
   try {
     marketcheckParams = await buildMarketcheckParams(params);
@@ -246,17 +297,17 @@ export const carSearchAI = async (params) => {
     return null;
   }
 
-  // Step 3: Ensure rows is set
+  // Step 2: Ensure rows is set
   marketcheckParams.rows = marketcheckParams.rows || 25;
 
-  // Step 4: Build query hash
+  // Step 3: Build query hash
   const queryHash = buildQueryHash(marketcheckParams);
 
-  // Step 5: Check cache
+  // Step 4: Check cache
   let marketcheckData = await getCachedResult(queryHash);
   const cacheHit = !!marketcheckData;
 
-  // Step 6: Fetch from API if not cached
+  // Step 5: Fetch from API if not cached
   if (!cacheHit) {
     try {
       marketcheckData = await fetchMarketcheckListings(marketcheckParams);
@@ -264,11 +315,11 @@ export const carSearchAI = async (params) => {
       console.error("[car-search] fetchMarketcheckListings error:", err.message);
       return null;
     }
-    await setCachedResult(queryHash, marketcheckData, marketcheckParams);
+    void setCachedResult(queryHash, marketcheckData, marketcheckParams);
   }
 
-  // Step 7: Save search history
-  await saveSearchHistory({
+  // Step 6: Save search history (fire-and-forget)
+  void saveSearchHistory({
     queryHash,
     formParams: extractFormParams(params),
     marketcheckParams,
@@ -277,10 +328,10 @@ export const carSearchAI = async (params) => {
     cacheHit,
   });
 
-  // Step 8: Transform listings
+  // Step 7: Transform listings
   const listings = transformMarketcheckResponse(marketcheckData);
 
-  // Step 9: Zero results
+  // Step 8: Zero results
   if (listings.length === 0) {
     return {
       summary: buildZeroResultsSummary(marketcheckParams),
@@ -290,7 +341,7 @@ export const carSearchAI = async (params) => {
     };
   }
 
-  // Step 10: Generate summary
+  // Step 9: Generate summary
   const summary = await generateSummary(
     params,
     marketcheckParams,
@@ -298,7 +349,7 @@ export const carSearchAI = async (params) => {
     listings.length
   );
 
-  // Step 11: Return result
+  // Step 10: Return result
   return {
     summary,
     listings,
