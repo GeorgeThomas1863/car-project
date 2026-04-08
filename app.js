@@ -33,4 +33,4 @@ app.use(routes);
 // app.use(uploadErrorHandler);
 
 await dbConnect();
-app.listen(process.env.PORT);
+app.listen(process.env.PORT, '127.0.0.1');
